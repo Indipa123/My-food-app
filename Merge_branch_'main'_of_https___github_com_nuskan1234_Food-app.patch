@@ -1,0 +1,17 @@
+Subject: [PATCH] Merge branch 'main' of https://github.com/nuskan1234/Food-Store
+---
+Index: app/src/main/java/com/testing/foodmanagement/DBHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/testing/foodmanagement/DBHelper.java b/app/src/main/java/com/testing/foodmanagement/DBHelper.java
+--- a/app/src/main/java/com/testing/foodmanagement/DBHelper.java	(revision b46ed59efaf4103281ce0ca46b5e68912f309422)
++++ b/app/src/main/java/com/testing/foodmanagement/DBHelper.java	(revision 7af9d4e869bb9bd2dd6209d28935de6ec027c5cf)
+@@ -413,4 +413,4 @@
+         db.close();
+         return customizations;
+     }
+-}
++}
+\ No newline at end of file

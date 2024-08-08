@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApp"
+        tools:targetApi="31">
+
+        <!-- Splash screen activity -->
+        <activity
+            android:name=".splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Main activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+
+        <!-- Login activity -->
+        <activity
+            android:name=".loginJava"
+            android:exported="false"/>
+
+        <!-- Signup activity -->
+        <activity
+            android:name=".signupJava"
+            android:exported="false"/>
+
+        <!-- Secondary main activity -->
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false"/>
+
+        <activity
+            android:name=".AddCategoryActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ViewCategoryActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".CategoryFoodItemsActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".FoodItemDetailActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ViewMenuActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".AddMenuActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".CustomerMenuActivity"
+            android:exported="false"/>
+
+
+
+
+        <!-- Admin dashboard activity -->
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+
+
+
+        <!-- Add Branch activity -->
+        <activity
+            android:name=".AddBranchActivity"
+            android:exported="true"/>
+
+        <!-- Select Location activity -->
+        <activity
+            android:name=".SelectLocationActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ViewBranchesActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".CustomizationActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".AssignCustomizationActivity"
+            android:exported="true"/>
+
+
+
+
+        <!-- API Key meta-data -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDp8Xl40aSIXqMtkiaCu3z2gqYoOxs0diY"/>
+
+    </application>
+
+</manifest>
