@@ -1,6 +1,9 @@
 package com.testing.foodmanagement;
 
-public class Customization {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Customization implements Parcelable {
     private int id;
     private String name;
     private double price;
@@ -40,4 +43,37 @@ public class Customization {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    // Parcelable implementation
+
+    // Constructor used for parcel
+    protected Customization(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        price = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeDouble(price);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Customization> CREATOR = new Creator<Customization>() {
+        @Override
+        public Customization createFromParcel(Parcel in) {
+            return new Customization(in);
+        }
+
+        @Override
+        public Customization[] newArray(int size) {
+            return new Customization[size];
+        }
+    };
 }

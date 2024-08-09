@@ -10,15 +10,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CustomizationAdapter extends RecyclerView.Adapter<CustomizationAdapter.ViewHolder> {
 
     private List<Customization> customizationList;
-    private Context context;
+    private Consumer<Customization> onCustomizationSelected;
 
-    public CustomizationAdapter(List<Customization> customizationList) {
+    public CustomizationAdapter(List<Customization> customizationList, Consumer<Customization> onCustomizationSelected) {
         this.customizationList = customizationList;
-        this.context = context;
+        this.onCustomizationSelected = onCustomizationSelected;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,10 +51,16 @@ public class CustomizationAdapter extends RecyclerView.Adapter<CustomizationAdap
 
         holder.buttonUpdate.setOnClickListener(v -> {
             // Handle update customization
+            if (onCustomizationSelected != null) {
+                onCustomizationSelected.accept(customization);
+            }
         });
 
         holder.buttonDelete.setOnClickListener(v -> {
             // Handle delete customization
+            if (onCustomizationSelected != null) {
+                onCustomizationSelected.accept(customization);
+            }
         });
     }
 
@@ -62,4 +69,3 @@ public class CustomizationAdapter extends RecyclerView.Adapter<CustomizationAdap
         return customizationList.size();
     }
 }
-

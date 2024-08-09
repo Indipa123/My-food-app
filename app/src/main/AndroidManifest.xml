@@ -79,6 +79,12 @@
             android:name=".CustomerMenuActivity"
             android:exported="false"/>
 
+        <activity
+            android:name=".FoodItemDetailActivity1"
+            android:exported="false"/>
+
+
+
 
 
 

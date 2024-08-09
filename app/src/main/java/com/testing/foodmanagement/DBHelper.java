@@ -372,28 +372,60 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
+    public List<Customization> getCustomizationsForFoodItem(int foodItemId) {
+        List<Customization> customizationList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT c.id, c.name, c.price " +
+                "FROM Customizations c " +
+                "JOIN FoodCustomizations fc ON c.id = fc.customizationId " +
+                "WHERE fc.foodItemId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(foodItemId)});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
+
+                Customization customization = new Customization(id, name, price);
+                customizationList.add(customization);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return customizationList;
+    }
 
 
 
 
 
     // Add the method to get a food item by its name
-    public FoodItem getFoodItemByName(String itemName) {
+    public FoodItem getFoodItemById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM food_items WHERE name = ?", new String[]{itemName});
-        if (cursor != null && cursor.moveToFirst()) {
-            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
-            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
-            @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
-            @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
-            @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-            @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
-            @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
-            @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+        Cursor cursor = null;
+        FoodItem foodItem = null;
 
-            cursor.close();
-            return new FoodItem(id, name, category, description, price, ingredients, available, image);
+        try {
+            cursor = db.rawQuery("SELECT * FROM food_items WHERE id = ?", new String[]{String.valueOf(id)});
+            if (cursor != null && cursor.moveToFirst()) {
+                @SuppressLint("Range") int itemId = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
+                @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
+                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
+                @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
+                @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+
+                foodItem = new FoodItem(itemId, name, category, description, price, ingredients, available, image);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        return null;
+
+        return foodItem;
     }
+
 }

@@ -1,4 +1,5 @@
 package com.testing.foodmanagement;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CustomizationActivity extends AppCompatActivity {
     private EditText editTextCustomizationName;
@@ -24,23 +26,20 @@ public class CustomizationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customization);
 
-        recyclerViewCustomizations = findViewById(R.id.recyclerViewCustomizations);
-        dbHelper = new DBHelper(this);
-
-        setupRecyclerView();
-
         // Initialize UI elements
+        recyclerViewCustomizations = findViewById(R.id.recyclerViewCustomizations);
         editTextCustomizationName = findViewById(R.id.editTextCustomizationName);
         editTextCustomizationPrice = findViewById(R.id.editTextCustomizationPrice);
         buttonAddCustomization = findViewById(R.id.buttonAddCustomization);
 
+        // Initialize DBHelper
+        dbHelper = new DBHelper(this);
+
+        // Setup RecyclerView
+        setupRecyclerView();
+
         // Set up button click listener
-        buttonAddCustomization.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCustomization();
-            }
-        });
+        buttonAddCustomization.setOnClickListener(v -> addCustomization());
     }
 
     private void addCustomization() {
@@ -65,24 +64,30 @@ public class CustomizationActivity extends AppCompatActivity {
         customization.setName(name);
         customization.setPrice(price);
 
-        DBHelper dbHelper = new DBHelper(this);
         long result = dbHelper.addCustomization(customization);
 
         if (result != -1) {
             Toast.makeText(this, "Customization added successfully", Toast.LENGTH_SHORT).show();
-            // Optionally, clear the input fields or finish the activity
+            // Clear the input fields
             editTextCustomizationName.setText("");
             editTextCustomizationPrice.setText("");
+            // Refresh the RecyclerView
+            setupRecyclerView();
         } else {
             Toast.makeText(this, "Error adding customization", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void setupRecyclerView() {
         recyclerViewCustomizations.setLayoutManager(new LinearLayoutManager(this));
 
         List<Customization> customizations = dbHelper.getAllCustomizations();
-        customizationAdapter = new CustomizationAdapter(customizations);
+        customizationAdapter = new CustomizationAdapter(customizations, selectedCustomization -> {
+            // Handle update or delete customization
+            // For example, show a dialog or new activity for update/delete
+            // You could also directly handle it here, like:
+            // Toast.makeText(this, "Selected: " + selectedCustomization.getName(), Toast.LENGTH_SHORT).show();
+        });
         recyclerViewCustomizations.setAdapter(customizationAdapter);
     }
 }
-
