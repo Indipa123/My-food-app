@@ -5,4 +5,5 @@
     <string name="singup">SingUp</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="google_maps_key">AIzaSyDp8Xl40aSIXqMtkiaCu3z2gqYoOxs0diY</string>
 </resources>

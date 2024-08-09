@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.gridlayout)
+    implementation(libs.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -57,10 +58,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.0.2")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.squareup.picasso:picasso:2.71828")
-
+    implementation ("androidx.fragment:fragment:1.5.7")
     implementation ("androidx.exifinterface:exifinterface:1.3.0")
-
-
     implementation ("com.sun.mail:android-mail:1.6.7")
     implementation ("com.sun.mail:android-activation:1.6.7")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")

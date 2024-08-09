@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,20 +23,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class signupJava extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
+    private static final int LOCATION_REQUEST_CODE = 1;
 
-    EditText fname, lname, email, pass, phone, address;
-    Button b1, takePhotoButton, importPhotoButton;
+    EditText fname, lname, email, pass, phone;
+    Button b1, takePhotoButton, importPhotoButton, chooseLocationButton;
     TextView t1;
     ImageView profileImageView;
     DBHelper DB;
     public static String SIGNUPEMAIL = "";
     private Bitmap profileBitmap;
+    private LatLng selectedLocation;  // To store the selected location
 
     private ActivityResultLauncher<Intent> takePictureLauncher;
     private ActivityResultLauncher<Intent> pickGalleryLauncher;
@@ -50,12 +55,12 @@ public class signupJava extends AppCompatActivity {
         email = findViewById(R.id.emailId);
         pass = findViewById(R.id.pwd);
         phone = findViewById(R.id.phone);
-        address = findViewById(R.id.address);
         b1 = findViewById(R.id.signinbtn);
         t1 = findViewById(R.id.signintxt);
         profileImageView = findViewById(R.id.profileImageView);
         takePhotoButton = findViewById(R.id.takePhotoButton);
         importPhotoButton = findViewById(R.id.importPhotoButton);
+        chooseLocationButton = findViewById(R.id.chooseLocationButton);  // Initialize the button
         DB = new DBHelper(this);
 
         takePictureLauncher = registerForActivityResult(
@@ -100,16 +105,20 @@ public class signupJava extends AppCompatActivity {
             pickGalleryLauncher.launch(pickPhoto);
         });
 
+        chooseLocationButton.setOnClickListener(v -> {
+            Intent intent = new Intent(signupJava.this, SelectLocationActivity.class);
+            startActivityForResult(intent, LOCATION_REQUEST_CODE);
+        });
+
         b1.setOnClickListener(view -> {
             String fnameStr = fname.getText().toString();
             String lnameStr = lname.getText().toString();
             String emailStr = email.getText().toString();
             String passStr = pass.getText().toString();
             String phoneStr = phone.getText().toString();
-            String addressStr = address.getText().toString();
 
-            if (fnameStr.equals("") || lnameStr.equals("") || emailStr.equals("") || passStr.equals("") || phoneStr.equals("") || addressStr.equals("")) {
-                Toast.makeText(signupJava.this, "Please enter all the fields", Toast.LENGTH_LONG).show();
+            if (fnameStr.equals("") || lnameStr.equals("") || emailStr.equals("") || passStr.equals("") || phoneStr.equals("") || selectedLocation == null) {
+                Toast.makeText(signupJava.this, "Please enter all the fields and select a location", Toast.LENGTH_LONG).show();
             } else {
                 Boolean checkemail = DB.checkEmail(emailStr);
                 if (!checkemail) {
@@ -119,6 +128,9 @@ public class signupJava extends AppCompatActivity {
                         profileBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         imageBytes = stream.toByteArray();
                     }
+
+                    // Save location as a string
+                    String addressStr = selectedLocation.latitude + "," + selectedLocation.longitude;
 
                     Boolean insert = DB.insertData(fnameStr, lnameStr, emailStr, passStr, phoneStr, addressStr, imageBytes);
                     if (insert) {
@@ -140,6 +152,17 @@ public class signupJava extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOCATION_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            selectedLocation = data.getParcelableExtra("location");
+            // Optionally, update the UI to indicate that a location was selected
+            Toast.makeText(this, "Location Selected: " + selectedLocation.latitude + ", " + selectedLocation.longitude, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
+    <!-- Search View for searching location -->
+    <SearchView
+        android:id="@+id/locationSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search for a location" />
+
+    <!-- Map Fragment -->
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/locationSearchView" />
+
+</RelativeLayout>
