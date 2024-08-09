@@ -90,8 +90,6 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
         FindCurrentPlaceRequest placeRequest = FindCurrentPlaceRequest.newInstance(
                 Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
