@@ -7,9 +7,11 @@ public class Customization implements Parcelable {
     private int id;
     private String name;
     private double price;
+    private boolean isSelected;
 
     // Default constructor
     public Customization() {
+        this.isSelected = false; // Default to not selected
     }
 
     // Parameterized constructor
@@ -17,6 +19,7 @@ public class Customization implements Parcelable {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.isSelected = false; // Default to not selected
     }
 
     // Getters and Setters
@@ -44,6 +47,14 @@ public class Customization implements Parcelable {
         this.price = price;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     // Parcelable implementation
 
     // Constructor used for parcel
@@ -51,6 +62,7 @@ public class Customization implements Parcelable {
         id = in.readInt();
         name = in.readString();
         price = in.readDouble();
+        isSelected = in.readByte() != 0; // Read boolean as byte
     }
 
     @Override
@@ -58,6 +70,7 @@ public class Customization implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeDouble(price);
+        dest.writeByte((byte) (isSelected ? 1 : 0)); // Write boolean as byte
     }
 
     @Override

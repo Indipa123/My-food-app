@@ -1,9 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-
 
     <ImageView
         android:id="@+id/imageViewFoodItem"
@@ -13,18 +13,45 @@
 
     <TextView
         android:id="@+id/textViewFoodItemName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:paddingTop="8dp" />
+        android:textStyle="bold"
+        android:paddingTop="8dp"
+        android:textColor="@android:color/black"
+        android:text="Food Item Name" />
 
     <TextView
         android:id="@+id/textViewFoodItemDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:paddingTop="4dp"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        android:textColor="@android:color/darker_gray"
+        android:text="Food Item Description" />
+
+    <TextView
+        android:id="@+id/textViewFoodItemPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="Price" />
+
+    <TextView
+        android:id="@+id/textViewCustomizationsHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@android:color/black"
+        android:text="Available Customizations" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCustomizations"
@@ -37,5 +64,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add to Basket"
-        android:layout_marginTop="16dp" />
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white" />
 </LinearLayout>
