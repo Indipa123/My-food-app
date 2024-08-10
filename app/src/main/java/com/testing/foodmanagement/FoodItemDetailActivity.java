@@ -13,17 +13,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FoodItemDetailActivity extends AppCompatActivity {
     private ImageView imageViewFoodItem;
     private TextView textViewFoodItemName;
     private TextView textViewFoodItemDescription;
-    private TextView textViewFoodItemPrice; // Added for price
+    private TextView textViewFoodItemPrice;
     private RecyclerView recyclerViewCustomizations;
     private Button buttonAddToBasket;
     private DBHelper dbHelper;
     private FoodItem foodItem;
+    private CustomizationAdapterUser adapter;
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -34,9 +36,9 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         imageViewFoodItem = findViewById(R.id.imageViewFoodItem);
         textViewFoodItemName = findViewById(R.id.textViewFoodItemName);
         textViewFoodItemDescription = findViewById(R.id.textViewFoodItemDescription);
-        textViewFoodItemPrice = findViewById(R.id.textViewFoodItemPrice); // Initialize the price TextView
+        textViewFoodItemPrice = findViewById(R.id.textViewFoodItemPrice);
         recyclerViewCustomizations = findViewById(R.id.recyclerViewCustomizations);
-        buttonAddToBasket = findViewById(R.id.buttonAddToBasket);
+        buttonAddToBasket = findViewById(R.id.buttonAdd);
 
         dbHelper = new DBHelper(this);
 
@@ -46,7 +48,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         if (foodItem != null) {
             textViewFoodItemName.setText(foodItem.getName());
             textViewFoodItemDescription.setText(foodItem.getDescription());
-            textViewFoodItemPrice.setText(String.format("RS %.2f", foodItem.getPrice())); // Set the price
+            textViewFoodItemPrice.setText(String.format("RS %.2f", foodItem.getPrice()));
 
             byte[] imageByteArray = foodItem.getImage();
             if (imageByteArray != null && imageByteArray.length > 0) {
@@ -60,13 +62,27 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         }
 
         buttonAddToBasket.setOnClickListener(v -> {
-            // Add food item to basket logic
+            // Collect selected customizations
+            List<Customization> selectedCustomizations = adapter.getSelectedCustomizations();
+            foodItem.setSelectedCustomizations(selectedCustomizations);
+
+            // Calculate the total price
+            double totalPrice = foodItem.getTotalPrice();
+
+            // Create an intent to pass data to CartActivity
+            Intent cartIntent = new Intent(FoodItemDetailActivity.this, CartActivity.class);
+            cartIntent.putExtra("cartItems", new ArrayList<FoodItem>() {{
+                add(foodItem);
+            }});
+            cartIntent.putExtra("totalPrice", totalPrice);
+
+            startActivity(cartIntent);
         });
     }
 
     private void loadCustomizations() {
         List<Customization> customizations = dbHelper.getCustomizationsForFoodItem(foodItem.getId());
-        CustomizationAdapterUser adapter = new CustomizationAdapterUser(this, customizations);
+        adapter = new CustomizationAdapterUser(this, customizations);
         recyclerViewCustomizations.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCustomizations.setAdapter(adapter);
     }

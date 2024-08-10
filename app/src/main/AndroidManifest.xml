@@ -64,10 +64,6 @@
             android:exported="true"/>
 
         <activity
-            android:name=".FoodItemDetailActivity"
-            android:exported="true"/>
-
-        <activity
             android:name=".ViewMenuActivity"
             android:exported="false"/>
 
@@ -80,8 +76,14 @@
             android:exported="false"/>
 
         <activity
-            android:name=".FoodItemDetailActivity1"
+            android:name=".FoodItemDetailActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".CartActivity"
             android:exported="false"/>
+
+
 
 
 
@@ -122,8 +124,6 @@
         <activity
             android:name=".AssignCustomizationActivity"
             android:exported="true"/>
-
-
 
 
         <!-- API Key meta-data -->

@@ -3,7 +3,9 @@ package com.testing.foodmanagement;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Customization implements Parcelable {
+import java.io.Serializable;
+
+public class Customization implements Parcelable, Serializable {
     private int id;
     private String name;
     private double price;

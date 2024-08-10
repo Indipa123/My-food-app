@@ -39,7 +39,7 @@ public class CustomerMenuActivity extends AppCompatActivity {
             List<Customization> customizations = dbHelper.getCustomizationsForFoodItem(selectedFoodItem.getId());
 
             // Pass the selected food item and its customizations to the FoodItemDetailActivity
-            Intent intent = new Intent(CustomerMenuActivity.this, FoodItemDetailActivity1.class);
+            Intent intent = new Intent(CustomerMenuActivity.this, FoodItemDetailActivity.class);
             intent.putExtra("foodItem", selectedFoodItem);
             intent.putParcelableArrayListExtra("customizations", (ArrayList<Customization>) customizations);
             startActivity(intent);

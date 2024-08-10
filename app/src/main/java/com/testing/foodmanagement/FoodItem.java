@@ -1,6 +1,7 @@
 package com.testing.foodmanagement;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class FoodItem implements Serializable {
     private int id;
@@ -11,7 +12,9 @@ public class FoodItem implements Serializable {
     private String ingredients;
     private boolean available;
     private byte[] image;
+    private List<Customization> selectedCustomizations; // List to store selected customizations
 
+    // Constructor
     public FoodItem(int id, String name, String category, String description, double price, String ingredients, boolean available, byte[] image) {
         this.id = id;
         this.name = name;
@@ -56,6 +59,8 @@ public class FoodItem implements Serializable {
         this.description = description;
     }
 
+
+
     public double getPrice() {
         return price;
     }
@@ -86,5 +91,39 @@ public class FoodItem implements Serializable {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public List<Customization> getSelectedCustomizations() {
+        return selectedCustomizations;
+    }
+
+    public void setSelectedCustomizations(List<Customization> selectedCustomizations) {
+        this.selectedCustomizations = selectedCustomizations;
+    }
+
+    // Method to calculate the total price of the food item including customizations
+    public double getTotalPrice() {
+        double totalPrice = price;
+        if (selectedCustomizations != null) {
+            for (Customization customization : selectedCustomizations) {
+                totalPrice += customization.getPrice();
+            }
+        }
+        return totalPrice;
+    }
+
+    // Method to generate a summary string for the food item including customizations
+    public String getCustomizationSummary() {
+        StringBuilder summary = new StringBuilder(name);
+        if (selectedCustomizations != null && !selectedCustomizations.isEmpty()) {
+            summary.append(" with ");
+            for (int i = 0; i < selectedCustomizations.size(); i++) {
+                summary.append(selectedCustomizations.get(i).getName());
+                if (i < selectedCustomizations.size() - 1) {
+                    summary.append(", ");
+                }
+            }
+        }
+        return summary.toString();
     }
 }

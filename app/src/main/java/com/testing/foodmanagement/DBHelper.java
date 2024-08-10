@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 8);
+        super(context, DBNAME, null, 9);
     }
 
     @Override
@@ -78,6 +79,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(foodItemId) REFERENCES food_items(id), " +
                 "FOREIGN KEY(customizationId) REFERENCES Customizations(id))");
 
+        MyDB.execSQL("CREATE TABLE Cart(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT, " +
+                "price REAL," +
+                "quantity INTEGER," +
+                "image BLOB)");
+
 
 
         Log.d("DBHelper", "Database tables created.");
@@ -93,6 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
         MyDB.execSQL("DROP TABLE IF EXISTS Categories");
         MyDB.execSQL("DROP TABLE IF EXISTS Customizations");
         MyDB.execSQL("DROP TABLE IF EXISTS FoodCustomizations");
+        MyDB.execSQL("DROP TABLE IF EXISTS Cart");
         onCreate(MyDB);
     }
 
@@ -428,4 +437,56 @@ public class DBHelper extends SQLiteOpenHelper {
         return foodItem;
     }
 
+    public void addToCart(CartItem cartItem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", cartItem.getName());
+        values.put("price", cartItem.getPrice());
+        values.put("quantity", cartItem.getQuantity());
+        values.put("image", cartItem.getImage());
+
+        db.insert("Cart", null, values);
+        db.close();
+    }
+
+    public List<CartItem> getAllCartItems() {
+        List<CartItem> cartItemList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Cart", null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
+                @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+                @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+
+                // Assuming you don't have any customizations stored in the database,
+                // you can pass an empty list for now.
+                List<Customization> customizations = new ArrayList<>(); // Or fetch customizations from the database
+
+                // Create the CartItem with the list of customizations
+                CartItem cartItem = new CartItem(id, name, price, quantity, image, customizations);
+                cartItemList.add(cartItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return cartItemList;
+    }
+
+    public void updateCartItem(int id, int newQuantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("quantity", newQuantity);
+
+        db.update("Cart", values, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteCartItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Cart", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 }
