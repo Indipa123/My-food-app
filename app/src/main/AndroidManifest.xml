@@ -87,7 +87,9 @@
             android:name=".CartActivity"
             android:exported="false"/>
 
-
+        <activity
+            android:name=".AddPromotionActivity"
+            android:exported="true"/>
 
 
 

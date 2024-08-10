@@ -86,6 +86,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 "quantity INTEGER," +
                 "image BLOB)");
 
+        MyDB.execSQL("CREATE TABLE Promotions(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "promotion_name TEXT, " +
+                "description TEXT, " +
+                "image BLOB)");
+
 
 
         Log.d("DBHelper", "Database tables created.");
@@ -102,7 +108,40 @@ public class DBHelper extends SQLiteOpenHelper {
         MyDB.execSQL("DROP TABLE IF EXISTS Customizations");
         MyDB.execSQL("DROP TABLE IF EXISTS FoodCustomizations");
         MyDB.execSQL("DROP TABLE IF EXISTS Cart");
+        MyDB.execSQL("DROP TABLE IF EXISTS Promotions");
         onCreate(MyDB);
+    }
+
+    public long addPromotion(String promotionName, String description, byte[] image) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("promotion_name", promotionName);
+        values.put("description", description);
+        values.put("image", image);
+
+        long result = db.insert("Promotions", null, values);
+        db.close();
+        return result;
+    }
+
+    public List<Promotion> getAllPromotions() {
+        List<Promotion> promotionList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Promotions", null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String promotionName = cursor.getString(cursor.getColumnIndex("promotion_name"));
+                @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+                @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+
+                Promotion promotion = new Promotion(id, promotionName, description, image);
+                promotionList.add(promotion);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return promotionList;
     }
 
     public void addCategory(Category category) {
@@ -133,6 +172,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return categoryList;
     }
+
+
 
     public int addFoodItem(FoodItem foodItem) {
         SQLiteDatabase db = this.getWritableDatabase();
