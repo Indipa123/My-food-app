@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- ImageView for displaying food item image -->
+    <ImageView
+        android:id="@+id/imageViewFoodItem"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="16dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Food item summary -->
+        <TextView
+            android:id="@+id/textViewFoodItemSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Item Summary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Food item price -->
+        <TextView
+            android:id="@+id/textViewFoodItemPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RS 0.00"
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+    </LinearLayout>
+
+    <!-- Buttons for increasing, decreasing, and deleting items -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/buttonIncrease"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="+"
+            android:layout_marginBottom="4dp"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonDecrease"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="-"
+            android:layout_marginBottom="4dp"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="x"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>

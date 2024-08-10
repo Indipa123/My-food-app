@@ -163,7 +163,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
         if (matchedItem != null) {
             // Start the FoodDetailActivity with the matched food item details
-            Intent intent = new Intent(MainActivity2.this, FoodItemDetailActivity.class);
+            Intent intent = new Intent(MainActivity2.this, FoodItemDetailActivity1.class);
             intent.putExtra("foodName", matchedItem.getName());
             intent.putExtra("foodCategory", matchedItem.getCategory());
             intent.putExtra("foodPrice", matchedItem.getPrice());
