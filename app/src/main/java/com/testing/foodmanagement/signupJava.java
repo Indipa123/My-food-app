@@ -136,7 +136,7 @@ public class signupJava extends AppCompatActivity {
                     if (insert) {
                         Toast.makeText(signupJava.this, "Registered Successfully", Toast.LENGTH_LONG).show();
                         SIGNUPEMAIL = emailStr;
-                        Intent intent = new Intent(signupJava.this, MainActivity2.class);
+                        Intent intent = new Intent(signupJava.this, loginJava.class);
                         intent.putExtra("EMAIL", emailStr);
                         startActivity(intent);
                     } else {
@@ -149,7 +149,7 @@ public class signupJava extends AppCompatActivity {
         });
 
         t1.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+            Intent intent = new Intent(getApplicationContext(), loginJava.class);
             startActivity(intent);
         });
     }
