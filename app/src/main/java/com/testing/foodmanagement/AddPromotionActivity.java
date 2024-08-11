@@ -84,7 +84,7 @@ public class AddPromotionActivity extends AppCompatActivity {
 
     private byte[] getBytesFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
         return stream.toByteArray();
     }
 }

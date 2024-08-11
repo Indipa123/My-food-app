@@ -16,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 9);
+        super(context, DBNAME, null, 11);
     }
 
     @Override
@@ -372,6 +372,30 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return foodItemList;
     }
+    public List<FoodItem> getFoodItemsByName(String itemName) {
+        List<FoodItem> foodItemList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM food_items WHERE name = ?", new String[]{itemName});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
+                @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
+                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
+                @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
+                @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+
+                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                foodItemList.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return foodItemList;
+    }
+
     public long addCustomization(Customization customization) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

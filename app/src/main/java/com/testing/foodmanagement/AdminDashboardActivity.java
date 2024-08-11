@@ -71,8 +71,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(AdminDashboardActivity.this, ViewBranchesActivity.class);
             startActivity(intent);
         });
-        CardView customizCard = findViewById(R.id.customizCard);
 
+        CardView customizCard = findViewById(R.id.customizCard);
         customizCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +80,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 Intent intent = new Intent(AdminDashboardActivity.this, CustomizationActivity.class);
                 startActivity(intent);
             }
+        });
+
+        CardView PromoCard = findViewById(R.id.promocard);
+
+        PromoCard.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, AddPromotionActivity.class);
+            startActivity(intent);
         });
     }
 }
