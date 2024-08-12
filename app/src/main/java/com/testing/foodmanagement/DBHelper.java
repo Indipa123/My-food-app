@@ -166,7 +166,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 promotionList.add(promotion);
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
+        db.close();
+        return promotionList;
     }
+
 
     public void addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
