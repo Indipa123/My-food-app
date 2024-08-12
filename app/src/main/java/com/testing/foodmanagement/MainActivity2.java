@@ -81,6 +81,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
             return false;
         });
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
