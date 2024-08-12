@@ -597,25 +597,31 @@ public class DBHelper extends SQLiteOpenHelper {
         return result > 0; // Return true if update is successful
     }
 
-    public Bitmap getProfilePicture(String email) {
-        SQLiteDatabase MyDB = this.getReadableDatabase();
-        Cursor cursor = MyDB.rawQuery("SELECT profile_image FROM Users WHERE email=?", new String[]{email});
+    public Bitmap getProfileImage(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Bitmap profileImage = null;
 
-        if (cursor != null && cursor.moveToFirst()) {
-            byte[] imageBytes = cursor.getBlob(0);
-            cursor.close();
-            if (imageBytes != null) {
-                return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        Cursor cursor = db.rawQuery("SELECT profile_image FROM Users WHERE email = ?", new String[]{email});
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                byte[] imageBytes = cursor.getBlob(0);
+                if (imageBytes != null) {
+                    profileImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                }
             }
+            cursor.close();
         }
-
-        return null; // Return null if no image is found
+        return profileImage;
     }
+
+
     private byte[] getBytesFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
         return outputStream.toByteArray();
     }
+
+
 
 
 }
