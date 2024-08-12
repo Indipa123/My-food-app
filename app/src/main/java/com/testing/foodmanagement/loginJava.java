@@ -60,6 +60,8 @@ public class loginJava extends AppCompatActivity {
                             clearSavedCredentials();
                         }
 
+                        saveUserEmail(email); // Save the logged-in admin's email
+
                         Intent adminIntent = new Intent(loginJava.this, AdminDashboardActivity.class);
                         startActivity(adminIntent);
                     } else {
@@ -73,6 +75,8 @@ public class loginJava extends AppCompatActivity {
                             } else {
                                 clearSavedCredentials();
                             }
+
+                            saveUserEmail(email); // Save the logged-in user's email
 
                             Intent i3 = new Intent(loginJava.this, MainActivity2.class);
                             i3.putExtra("EMAIL", email);
@@ -129,6 +133,14 @@ public class loginJava extends AppCompatActivity {
         editor.remove("password");
         editor.remove("admin_email");
         editor.remove("admin_password");
+        editor.apply();
+    }
+
+    // Method to save the logged-in user's email
+    private void saveUserEmail(String email) {
+        SharedPreferences sharedPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("logged_user_email", email);
         editor.apply();
     }
 }
