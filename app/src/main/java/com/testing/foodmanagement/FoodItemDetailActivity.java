@@ -66,6 +66,15 @@ public class FoodItemDetailActivity extends AppCompatActivity {
             List<Customization> selectedCustomizations = adapter.getSelectedCustomizations();
             foodItem.setSelectedCustomizations(selectedCustomizations);
 
+            CartItem cartItem = new CartItem(
+                    foodItem.getId(), // food_id
+                    foodItem.getName(),
+                    foodItem.getTotalPrice(),
+                    1, // Assuming quantity is 1 for simplicity
+                    foodItem.getImage(),
+                    selectedCustomizations
+            );
+            dbHelper.addToCart(cartItem);
             // Calculate the total price
             double totalPrice = foodItem.getTotalPrice();
 
