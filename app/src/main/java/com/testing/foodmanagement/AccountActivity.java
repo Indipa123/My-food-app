@@ -1,8 +1,10 @@
 package com.testing.foodmanagement;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -17,15 +19,40 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AccountActivity extends AppCompatActivity {
 
+    DBHelper dbHelper;
+    ImageView profileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
+        dbHelper = new DBHelper(this);
+        profileImageView = findViewById(R.id.profileImageView);
+
+        // Retrieve logged-in email from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String email = sharedPreferences.getString("logged_in_user_email", "");
+
         // Set user's name (example)
         TextView textViewAccount = findViewById(R.id.textViewAccount);
         textViewAccount.setText("Indipa Gangoda");
+
+        // Display the profile picture if available
+        if (!email.isEmpty()) {
+            Bitmap profileImage = dbHelper.getProfileImage(email);
+            if (profileImage != null) {
+                Glide.with(this)
+                        .load(profileImage)
+                        .transform(new CircleCrop())
+                        .into(profileImageView);
+            } else {
+                Glide.with(this)
+                        .load(R.drawable.ic_account)
+                        .transform(new CircleCrop())
+                        .into(profileImageView);
+            }
+        }
 
         // Set up buttons and other elements
         Button buttonFavourites = findViewById(R.id.buttonFavourites);
@@ -77,7 +104,6 @@ public class AccountActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
         // Additional views can be set up similarly
     }
