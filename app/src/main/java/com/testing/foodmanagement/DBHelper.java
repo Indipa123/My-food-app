@@ -621,6 +621,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return outputStream.toByteArray();
     }
 
+    public String getFirstNameByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String firstName = "";
+        Cursor cursor = db.rawQuery("SELECT firstName FROM Users WHERE email = ?", new String[]{email});
+        if (cursor != null && cursor.moveToFirst()) {
+            firstName = cursor.getString(0);
+            cursor.close();
+        }
+        return firstName;
+    }
+
+    public String getLastNameByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String lastName = "";
+        Cursor cursor = db.rawQuery("SELECT lastName FROM Users WHERE email = ?", new String[]{email});
+        if (cursor != null && cursor.moveToFirst()) {
+            lastName = cursor.getString(0);
+            cursor.close();
+        }
+        return lastName;
+    }
+
 
 
 

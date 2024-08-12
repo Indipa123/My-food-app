@@ -34,9 +34,13 @@ public class AccountActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         String email = sharedPreferences.getString("logged_in_user_email", "");
 
-        // Set user's name (example)
+        // Fetch the first name, last name, and profile picture from the database
+        String firstName = dbHelper.getFirstNameByEmail(email);
+        String lastName = dbHelper.getLastNameByEmail(email);
+
+        // Set user's name in TextView
         TextView textViewAccount = findViewById(R.id.textViewAccount);
-        textViewAccount.setText("Indipa Gangoda");
+        textViewAccount.setText(firstName + " " + lastName);
 
         // Display the profile picture if available
         if (!email.isEmpty()) {
