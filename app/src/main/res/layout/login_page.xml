@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="70dp"
             android:text="Login"
-            android:textColor="#3F51B5"
+            android:textColor="#FF5722"
             android:textSize="36sp"
             android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Email"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Password"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
@@ -76,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="Save Credentials"
+            android:textColorLink="#FF5722"
             android:textSize="18sp" />
 
         <Button
@@ -89,7 +90,7 @@
             android:textColor="#FBF8F8"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:backgroundTint="#2196F3"
+            app:backgroundTint="#FF5722"
             app:cornerRadius="25dp" />
 
     </LinearLayout>
@@ -123,7 +124,7 @@
                 android:gravity="right"
                 android:text="Sign Up"
                 android:textAllCaps="false"
-                android:textColor="#2747FB"
+                android:textColor="#E91E63"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
