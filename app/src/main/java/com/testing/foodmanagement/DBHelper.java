@@ -16,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 11);
+        super(context, DBNAME, null, 12);
     }
 
     @Override
@@ -86,12 +86,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 "quantity INTEGER," +
                 "image BLOB)");
 
-        MyDB.execSQL("CREATE TABLE Promotions(" +
+
+
+        MyDB.execSQL("CREATE TABLE Promotions (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "promotion_name TEXT, " +
+                "promotion_code TEXT, " +
                 "description TEXT, " +
+                "promotion_start_date TEXT, " +
+                "promotion_end_date TEXT, " +
+                "promotion_discount REAL, " +
                 "image BLOB)");
-
 
 
         Log.d("DBHelper", "Database tables created.");
@@ -112,11 +117,17 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(MyDB);
     }
 
-    public long addPromotion(String promotionName, String description, byte[] image) {
+    public long addPromotion(String promotionName, String promotionCode, String description,
+                             String promotionStartDate, String promotionEndDate,
+                             double promotionDiscount, byte[] image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("promotion_name", promotionName);
+        values.put("promotion_code", promotionCode);
         values.put("description", description);
+        values.put("promotion_start_date", promotionStartDate);
+        values.put("promotion_end_date", promotionEndDate);
+        values.put("promotion_discount", promotionDiscount);
         values.put("image", image);
 
         long result = db.insert("Promotions", null, values);
@@ -124,25 +135,38 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
+
     public List<Promotion> getAllPromotions() {
         List<Promotion> promotionList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+
+        // Adjust the query to select all necessary columns
         Cursor cursor = db.rawQuery("SELECT * FROM Promotions", null);
+
         if (cursor.moveToFirst()) {
             do {
+                // Retrieve all columns from the cursor
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
                 @SuppressLint("Range") String promotionName = cursor.getString(cursor.getColumnIndex("promotion_name"));
+                @SuppressLint("Range") String promotionCode = cursor.getString(cursor.getColumnIndex("promotion_code"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+                @SuppressLint("Range") String promotionStartDate = cursor.getString(cursor.getColumnIndex("promotion_start_date"));
+                @SuppressLint("Range") String promotionEndDate = cursor.getString(cursor.getColumnIndex("promotion_end_date"));
+                @SuppressLint("Range") double promotionDiscount = cursor.getDouble(cursor.getColumnIndex("promotion_discount"));
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                Promotion promotion = new Promotion(id, promotionName, description, image);
+                // Create a Promotion object with all attributes
+                Promotion promotion = new Promotion(id, promotionName, promotionCode, description,
+                        promotionStartDate, promotionEndDate, promotionDiscount, image);
                 promotionList.add(promotion);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
         db.close();
         return promotionList;
     }
+
 
     public void addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
