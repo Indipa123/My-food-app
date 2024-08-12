@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class loginJava extends AppCompatActivity {
+
     EditText e1, e2;
     TextView t;
     Button b1;
@@ -36,6 +37,7 @@ public class loginJava extends AppCompatActivity {
         saveCredentials = findViewById(R.id.saveCredentials);
         DB = new DBHelper(this);
 
+        // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
         // Load saved credentials if available
@@ -60,8 +62,10 @@ public class loginJava extends AppCompatActivity {
                             clearSavedCredentials();
                         }
 
+                        // Start Admin Dashboard
                         Intent adminIntent = new Intent(loginJava.this, AdminDashboardActivity.class);
                         startActivity(adminIntent);
+
                     } else {
                         Boolean checkemailpassword = DB.checkEmailPassword(email, pwd);
                         if (checkemailpassword == true) {
@@ -74,9 +78,16 @@ public class loginJava extends AppCompatActivity {
                                 clearSavedCredentials();
                             }
 
+                            // Store the logged-in email in SharedPreferences for later use in AccountActivity
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("logged_in_user_email", email);
+                            editor.apply();
+
+                            // Start Main Activity
                             Intent i3 = new Intent(loginJava.this, MainActivity2.class);
                             i3.putExtra("EMAIL", email);
                             startActivity(i3);
+
                         } else {
                             Toast.makeText(loginJava.this, "Incorrect Username or Password", Toast.LENGTH_LONG).show();
                         }
@@ -85,6 +96,7 @@ public class loginJava extends AppCompatActivity {
             }
         });
 
+        // Handle "Sign Up" text click
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +106,7 @@ public class loginJava extends AppCompatActivity {
         });
     }
 
+    // Load saved credentials if they exist
     private void loadSavedCredentials() {
         String savedEmail = sharedPreferences.getString("email", "");
         String savedPassword = sharedPreferences.getString("password", "");
@@ -111,6 +124,7 @@ public class loginJava extends AppCompatActivity {
         }
     }
 
+    // Save credentials for future login
     private void saveCredentials(String email, String password) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (email.equals(ADMIN_EMAIL)) {
@@ -123,6 +137,7 @@ public class loginJava extends AppCompatActivity {
         editor.apply();
     }
 
+    // Clear saved credentials if user chooses not to save them
     private void clearSavedCredentials() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("email");

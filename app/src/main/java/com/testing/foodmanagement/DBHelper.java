@@ -7,13 +7,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
+
     public static final String DBNAME = "Canteen.db";
+    private static final String TABLE_USERS = "Users";
+    private static final String COLUMN_EMAIL = "email";
+    private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
         super(context, DBNAME, null, 10);
@@ -89,10 +95,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(food_id) REFERENCES food_items(id))"); // Correct the foreign key reference
 
 
-        MyDB.execSQL("CREATE TABLE Promotions(" +
+
+        MyDB.execSQL("CREATE TABLE Promotions (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "promotion_name TEXT, " +
+                "promotion_code TEXT, " +
                 "description TEXT, " +
+                "promotion_start_date TEXT, " +
+                "promotion_end_date TEXT, " +
+                "promotion_discount REAL, " +
                 "image BLOB)");
 
 
@@ -115,11 +126,17 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(MyDB);
     }
 
-    public long addPromotion(String promotionName, String description, byte[] image) {
+    public long addPromotion(String promotionName, String promotionCode, String description,
+                             String promotionStartDate, String promotionEndDate,
+                             double promotionDiscount, byte[] image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("promotion_name", promotionName);
+        values.put("promotion_code", promotionCode);
         values.put("description", description);
+        values.put("promotion_start_date", promotionStartDate);
+        values.put("promotion_end_date", promotionEndDate);
+        values.put("promotion_discount", promotionDiscount);
         values.put("image", image);
 
         long result = db.insert("Promotions", null, values);
@@ -130,22 +147,34 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<Promotion> getAllPromotions() {
         List<Promotion> promotionList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+
+        // Adjust the query to select all necessary columns
         Cursor cursor = db.rawQuery("SELECT * FROM Promotions", null);
+
         if (cursor.moveToFirst()) {
             do {
+                // Retrieve all columns from the cursor
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
                 @SuppressLint("Range") String promotionName = cursor.getString(cursor.getColumnIndex("promotion_name"));
+                @SuppressLint("Range") String promotionCode = cursor.getString(cursor.getColumnIndex("promotion_code"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+                @SuppressLint("Range") String promotionStartDate = cursor.getString(cursor.getColumnIndex("promotion_start_date"));
+                @SuppressLint("Range") String promotionEndDate = cursor.getString(cursor.getColumnIndex("promotion_end_date"));
+                @SuppressLint("Range") double promotionDiscount = cursor.getDouble(cursor.getColumnIndex("promotion_discount"));
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                Promotion promotion = new Promotion(id, promotionName, description, image);
+                // Create a Promotion object with all attributes
+                Promotion promotion = new Promotion(id, promotionName, promotionCode, description,
+                        promotionStartDate, promotionEndDate, promotionDiscount, image);
                 promotionList.add(promotion);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
         db.close();
         return promotionList;
     }
+
 
     public void addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -375,6 +404,30 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return foodItemList;
     }
+    public List<FoodItem> getFoodItemsByName(String itemName) {
+        List<FoodItem> foodItemList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM food_items WHERE name = ?", new String[]{itemName});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
+                @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
+                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
+                @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
+                @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+
+                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                foodItemList.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return foodItemList;
+    }
+
     public long addCustomization(Customization customization) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -534,4 +587,67 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete("Cart", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
+
+    public boolean updateProfilePicture(String email, Bitmap profileImage) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        // Convert Bitmap to byte array for storage
+        if (profileImage != null) {
+            contentValues.put("profile_image", getBytesFromBitmap(profileImage));
+        }
+
+        int result = MyDB.update("Users", contentValues, "email=?", new String[]{email});
+        return result > 0; // Return true if update is successful
+    }
+
+    public Bitmap getProfileImage(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Bitmap profileImage = null;
+
+        Cursor cursor = db.rawQuery("SELECT profile_image FROM Users WHERE email = ?", new String[]{email});
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                byte[] imageBytes = cursor.getBlob(0);
+                if (imageBytes != null) {
+                    profileImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                }
+            }
+            cursor.close();
+        }
+        return profileImage;
+    }
+
+
+    private byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        return outputStream.toByteArray();
+    }
+
+    public String getFirstNameByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String firstName = "";
+        Cursor cursor = db.rawQuery("SELECT firstName FROM Users WHERE email = ?", new String[]{email});
+        if (cursor != null && cursor.moveToFirst()) {
+            firstName = cursor.getString(0);
+            cursor.close();
+        }
+        return firstName;
+    }
+
+    public String getLastNameByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String lastName = "";
+        Cursor cursor = db.rawQuery("SELECT lastName FROM Users WHERE email = ?", new String[]{email});
+        if (cursor != null && cursor.moveToFirst()) {
+            lastName = cursor.getString(0);
+            cursor.close();
+        }
+        return lastName;
+    }
+
+
+
+
 }

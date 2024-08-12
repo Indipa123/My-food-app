@@ -1,10 +1,11 @@
 package com.testing.foodmanagement;
-
+import com.testing.foodmanagement.R;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -21,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +35,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
     private CardView cardViewFoodItems;
     private LinearLayout searchBar;
     private EditText searchEditText;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,30 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
                 return true;
             }
             return false;
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.nav_home) {
+                    // Handle navigation to Home
+                    // Replace with your fragment transaction or activity launch code
+                    return true;
+                } else if (itemId == R.id.nav_browse) {
+                    // Handle navigation to SearchActivity
+                    Intent intent = new Intent(MainActivity2.this, SearchActivity.class);
+                    startActivity(intent);
+                    return true;
+                } else if (itemId == R.id.nav_account) {
+                    // Handle navigation to AccountActivity
+                    Intent intent = new Intent(MainActivity2.this, AccountActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
         });
     }
 
@@ -183,9 +211,24 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Logic to initialize the map
-        LatLng location = new LatLng(-34, 151);
-        googleMap.addMarker(new MarkerOptions().position(location).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        mMap = googleMap;
+        DBHelper dbHelper = new DBHelper(this);
+        List<Branch> branches = dbHelper.getAllBranches(); // Method to get all branches
+
+        for (Branch branch : branches) {
+            String[] locationParts = branch.getLocation().split(",");
+            double lat = Double.parseDouble(locationParts[0]);
+            double lng = Double.parseDouble(locationParts[1]);
+            LatLng latLng = new LatLng(lat, lng);
+            mMap.addMarker(new MarkerOptions().position(latLng).title(branch.getBranchName()));
+        }
+
+        if (!branches.isEmpty()) {
+            String[] locationParts = branches.get(0).getLocation().split(",");
+            double lat = Double.parseDouble(locationParts[0]);
+            double lng = Double.parseDouble(locationParts[1]);
+            LatLng firstBranchLocation = new LatLng(lat, lng);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstBranchLocation, 10));
+        }
     }
 }

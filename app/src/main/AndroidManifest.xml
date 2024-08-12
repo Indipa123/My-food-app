@@ -53,6 +53,13 @@
             android:exported="false"/>
 
         <activity
+            android:name=".SearchActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".AccountActivity"
+            android:exported="true"/>
+        <activity
             android:name=".AddCategoryActivity"
             android:exported="false"/>
 

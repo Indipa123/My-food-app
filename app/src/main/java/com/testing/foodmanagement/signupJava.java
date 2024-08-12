@@ -33,7 +33,7 @@ public class signupJava extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int LOCATION_REQUEST_CODE = 1;
 
-    EditText fname, lname, email, pass, phone;
+    EditText fname, lname, email, pass,conpass, phone;
     Button b1, takePhotoButton, importPhotoButton, chooseLocationButton;
     TextView t1;
     ImageView profileImageView;
@@ -54,6 +54,7 @@ public class signupJava extends AppCompatActivity {
         lname = findViewById(R.id.lname);
         email = findViewById(R.id.emailId);
         pass = findViewById(R.id.pwd);
+        conpass = findViewById(R.id.confirmPwd);
         phone = findViewById(R.id.phone);
         b1 = findViewById(R.id.signinbtn);
         t1 = findViewById(R.id.signintxt);
@@ -115,11 +116,17 @@ public class signupJava extends AppCompatActivity {
             String lnameStr = lname.getText().toString();
             String emailStr = email.getText().toString();
             String passStr = pass.getText().toString();
+            String conpassStr = conpass.getText().toString();
             String phoneStr = phone.getText().toString();
 
-            if (fnameStr.equals("") || lnameStr.equals("") || emailStr.equals("") || passStr.equals("") || phoneStr.equals("") || selectedLocation == null) {
+            if (fnameStr.equals("") || lnameStr.equals("") || emailStr.equals("") || passStr.equals("") || conpassStr.equals("") || phoneStr.equals("") || selectedLocation == null) {
                 Toast.makeText(signupJava.this, "Please enter all the fields and select a location", Toast.LENGTH_LONG).show();
-            } else {
+            }
+            if(!passStr.equals(conpassStr)){
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else {
                 Boolean checkemail = DB.checkEmail(emailStr);
                 if (!checkemail) {
                     byte[] imageBytes = null;
@@ -136,7 +143,7 @@ public class signupJava extends AppCompatActivity {
                     if (insert) {
                         Toast.makeText(signupJava.this, "Registered Successfully", Toast.LENGTH_LONG).show();
                         SIGNUPEMAIL = emailStr;
-                        Intent intent = new Intent(signupJava.this, MainActivity2.class);
+                        Intent intent = new Intent(signupJava.this, loginJava.class);
                         intent.putExtra("EMAIL", emailStr);
                         startActivity(intent);
                     } else {
@@ -149,7 +156,7 @@ public class signupJava extends AppCompatActivity {
         });
 
         t1.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+            Intent intent = new Intent(getApplicationContext(), loginJava.class);
             startActivity(intent);
         });
     }
