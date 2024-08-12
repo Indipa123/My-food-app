@@ -554,4 +554,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete("Cart", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
+
+
 }
