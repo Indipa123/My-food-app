@@ -17,9 +17,6 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DBNAME = "Canteen.db";
-    private static final String TABLE_USERS = "Users";
-    private static final String COLUMN_EMAIL = "email";
-    private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
         super(context, DBNAME, null, 14);
@@ -671,6 +668,55 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return user;
     }
+    public Promotion getPromotionByName(String promotionName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("Promotions", null, "promotion_name=?", new String[]{promotionName}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Promotion promotion = new Promotion(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("promotion_name")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("promotion_code")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("promotion_start_date")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("promotion_end_date")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("promotion_discount")),
+                    cursor.getBlob(cursor.getColumnIndexOrThrow("image"))
+            );
+            cursor.close();
+            return promotion;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+    }
+    public List<CartItem> getCartItemsByCartId(int cartId) {
+        List<CartItem> cartItemList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM Cart WHERE id = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(cartId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                double price = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+                byte[] image = cursor.getBlob(cursor.getColumnIndexOrThrow("image"));
+
+                CartItem cartItem = new CartItem(id, name, price, quantity, image);
+                cartItemList.add(cartItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return cartItemList;
+    }
+
 
 
 

@@ -119,14 +119,20 @@ public class signupJava extends AppCompatActivity {
             String conpassStr = conpass.getText().toString();
             String phoneStr = phone.getText().toString();
 
-            if (fnameStr.equals("") || lnameStr.equals("") || emailStr.equals("") || passStr.equals("") || conpassStr.equals("") || phoneStr.equals("") || selectedLocation == null) {
-                Toast.makeText(signupJava.this, "Please enter all the fields and select a location", Toast.LENGTH_LONG).show();
+            if (fnameStr.equals("") || lnameStr.equals("") || emailStr.equals("") || passStr.equals("") || conpassStr.equals("") || phoneStr.equals("")) {
+                Toast.makeText(signupJava.this, "Please enter all the fields", Toast.LENGTH_LONG).show();
+                return; // Exit early to avoid proceeding with incomplete data
             }
-            if(!passStr.equals(conpassStr)){
+
+            if (selectedLocation == null) {
+                Toast.makeText(signupJava.this, "Please select a location", Toast.LENGTH_LONG).show();
+                return; // Exit early if location is not selected
+            }
+
+            if (!passStr.equals(conpassStr)) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
-            }
-            else {
+            } else {
                 Boolean checkemail = DB.checkEmail(emailStr);
                 if (!checkemail) {
                     byte[] imageBytes = null;
@@ -154,6 +160,7 @@ public class signupJava extends AppCompatActivity {
                 }
             }
         });
+
 
         t1.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), loginJava.class);

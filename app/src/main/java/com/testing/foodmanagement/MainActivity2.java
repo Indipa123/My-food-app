@@ -33,6 +33,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
     private LinearLayout linearLayoutRecentlyAdded;
     private LinearLayout linearLayoutCategories;
+    private LinearLayout linearLayoutPromotions;
     private CardView cardViewFoodItems;
     private LinearLayout searchBar;
     private EditText searchEditText;
@@ -53,6 +54,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         // Initialize views
         linearLayoutRecentlyAdded = findViewById(R.id.linearLayoutRecentlyAdded);
         linearLayoutCategories = findViewById(R.id.linearLayoutCategories);
+        linearLayoutPromotions = findViewById(R.id.linearLayoutPromotions);
         cardViewFoodItems = findViewById(R.id.cardViewFoodItems);
         searchBar = findViewById(R.id.searchBar);
         searchEditText = findViewById(R.id.search_edit_text);
@@ -70,6 +72,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         // Display recently added items
         displayRecentlyAddedItems();
         displayCategories();
+        displayPromotions();
 
         // Set click listener for food items card view
         cardViewFoodItems.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +244,41 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
             double lng = Double.parseDouble(locationParts[1]);
             LatLng firstBranchLocation = new LatLng(lat, lng);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstBranchLocation, 10));
+        }
+    }
+    private void displayPromotions() {
+        DBHelper dbHelper = new DBHelper(this);
+        List<Promotion> promotions = dbHelper.getAllPromotions();
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (Promotion promotion : promotions) {
+            View categoryView = inflater.inflate(R.layout.promotions, linearLayoutCategories, false);
+
+            ImageView categoryImageView = categoryView.findViewById(R.id.categoryImageView);
+            TextView textViewCategoryName = categoryView.findViewById(R.id.categoryNameTextView);
+
+            // Decode the byte array into a bitmap
+            byte[] imageByteArray = promotion.getImage();
+            if (imageByteArray != null && imageByteArray.length > 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+                categoryImageView.setImageBitmap(bitmap);
+            } else {
+                // Set a default image or placeholder if the imageByteArray is null or empty
+                categoryImageView.setImageResource(R.drawable.ic_category_placeholder);
+            }
+
+            textViewCategoryName.setText(promotion.getPromotionName());
+
+            categoryView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity2.this, ActivityPromotionDetails.class);
+                    intent.putExtra("categoryName", promotion.getPromotionName());
+                    startActivity(intent);
+                }
+            });
+
+            linearLayoutPromotions.addView(categoryView);
         }
     }
 }

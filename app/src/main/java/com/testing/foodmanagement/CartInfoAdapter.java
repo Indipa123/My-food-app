@@ -22,16 +22,25 @@ public class CartInfoAdapter extends RecyclerView.Adapter<CartInfoAdapter.CartVi
     private List<CartItem> cartItemList;
     private DBHelper dbHelper;
     private OnItemChangeListener onItemChangeListener;
+    private OnItemClickListener onItemClickListener;
 
+    // Interface for handling item changes like deletion
     public interface OnItemChangeListener {
         void onItemDeleted();
     }
 
-    public CartInfoAdapter(Context context, List<CartItem> cartItemList, DBHelper dbHelper, OnItemChangeListener onItemChangeListener) {
+    // Interface for handling item clicks to navigate to CheckoutActivity
+    public interface OnItemClickListener {
+        void onItemClick(int cartId);
+    }
+
+    public CartInfoAdapter(Context context, List<CartItem> cartItemList, DBHelper dbHelper,
+                           OnItemChangeListener onItemChangeListener, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.cartItemList = cartItemList;
         this.dbHelper = dbHelper;
         this.onItemChangeListener = onItemChangeListener;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -74,6 +83,13 @@ public class CartInfoAdapter extends RecyclerView.Adapter<CartInfoAdapter.CartVi
             Intent intent = new Intent(context, FoodItemDetailActivity3.class);
             intent.putExtra("cartItem", cartItem);
             context.startActivity(intent);
+        });
+
+        // Handle item click to navigate to CheckoutActivity
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(cartItem.getId());
+            }
         });
     }
 
