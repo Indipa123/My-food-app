@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 10);
+        super(context, DBNAME, null, 12);
     }
 
     @Override
