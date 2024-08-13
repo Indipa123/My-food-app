@@ -26,17 +26,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Category Image"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp" />
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/categoryImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
+        android:layout_width="314dp"
+        android:layout_height="176dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"
+        android:scaleType="centerCrop" />
 
     <Button
         android:id="@+id/selectImageButton"
@@ -50,6 +50,6 @@
         android:id="@+id/addCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Category"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:text="Add Category" />
 </LinearLayout>

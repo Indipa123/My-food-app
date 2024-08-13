@@ -220,7 +220,7 @@
                     android:gravity="right"
                     android:text="Log In"
                     android:textAllCaps="false"
-                    android:textColor="#E91E63"
+                    android:textColor="#E91E1E"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
