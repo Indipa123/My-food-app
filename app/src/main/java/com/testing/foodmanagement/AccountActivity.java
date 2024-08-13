@@ -38,7 +38,7 @@ public class AccountActivity extends AppCompatActivity {
         String firstName = dbHelper.getFirstNameByEmail(email);
         String lastName = dbHelper.getLastNameByEmail(email);
 
-        // Set user's name in TextView
+        // Set User's name in TextView
         TextView textViewAccount = findViewById(R.id.textViewAccount);
         textViewAccount.setText(firstName + " " + lastName);
 
