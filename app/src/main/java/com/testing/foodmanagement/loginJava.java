@@ -137,7 +137,7 @@ public class loginJava extends AppCompatActivity {
         editor.apply();
     }
 
-    // Clear saved credentials if user chooses not to save them
+    // Clear saved credentials if User chooses not to save them
     private void clearSavedCredentials() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("email");
