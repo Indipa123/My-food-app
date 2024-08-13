@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 12);
+        super(context, DBNAME, null, 14);
     }
 
     @Override
@@ -573,14 +573,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return cartItemList;
     }
 
-    public void updateCartItem(int id, int newQuantity) {
+    public void updateCartItem(CartItem cartItem) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("quantity", newQuantity);
+        values.put("name", cartItem.getName());
+        values.put("price", cartItem.getPrice());
+        values.put("quantity", cartItem.getQuantity());
+        values.put("image", cartItem.getImage());
 
-        db.update("Cart", values, "id = ?", new String[]{String.valueOf(id)});
+        db.update("Cart", values, "id" + " = ?", new String[]{String.valueOf(cartItem.getId())});
         db.close();
     }
+
 
     public void deleteCartItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
