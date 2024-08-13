@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 12);
+        super(context, DBNAME, null, 10);
     }
 
     @Override
@@ -87,10 +87,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         MyDB.execSQL("CREATE TABLE Cart(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "food_id INTEGER, " +  // Ensure this column is included
                 "name TEXT, " +
                 "price REAL," +
                 "quantity INTEGER," +
-                "image BLOB)");
+                "image BLOB," +
+                "FOREIGN KEY(food_id) REFERENCES food_items(id))"); // Correct the foreign key reference
+
 
 
         MyDB.execSQL("CREATE TABLE Promotions (" +
@@ -497,11 +500,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return customizationList;
     }
-
-
-
-
-
     // Add the method to get a food item by its name
     public FoodItem getFoodItemById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -534,13 +532,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public void addToCart(CartItem cartItem) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put("food_id", cartItem.getId()); // Add food_id to the Cart table
         values.put("name", cartItem.getName());
         values.put("price", cartItem.getPrice());
         values.put("quantity", cartItem.getQuantity());
         values.put("image", cartItem.getImage());
-
-        db.insert("Cart", null, values);
+        long result = db.insert("Cart", null, values);
         db.close();
+        if (result == -1) {
+            // Handle the error if the insertion fails
+            System.out.println("Failed to add to cart.");
+        } else {
+            System.out.println("Added to cart successfully.");
+        }
     }
 
     public List<CartItem> getAllCartItems() {
