@@ -676,7 +676,6 @@ public class DBHelper extends SQLiteOpenHelper {
             Promotion promotion = new Promotion(
                     cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                     cursor.getString(cursor.getColumnIndexOrThrow("promotion_name")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("promotion_code")),
                     cursor.getString(cursor.getColumnIndexOrThrow("description")),
                     cursor.getString(cursor.getColumnIndexOrThrow("promotion_start_date")),
                     cursor.getString(cursor.getColumnIndexOrThrow("promotion_end_date")),
