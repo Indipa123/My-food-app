@@ -714,7 +714,38 @@ public class DBHelper extends SQLiteOpenHelper {
         return cartItemList;
     }
 
+    public List<String> getAllUserEmails() {
+        List<String> emails = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT email FROM users", null);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
+                        emails.add(cursor.getString(0));
+                    } while (cursor.moveToNext());
+                }
+            } catch (Exception e) {
+                Log.e("DBHelper", "Error fetching emails", e);
+            } finally {
+                cursor.close();
+            }
+        }
+        return emails;
+    }
 
+    public void deleteCustomization(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("customizations", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 
-
+    public void updateCustomization(Customization customization) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", customization.getName());
+        values.put("price", customization.getPrice());
+        db.update("customizations", values, "id = ?", new String[]{String.valueOf(customization.getId())});
+        db.close();
+    }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Customization Name Input -->
+    <TextView
+        android:id="@+id/textViewCustomizationName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customization Name"
+        android:textSize="16sp"
+        android:paddingBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/editTextCustomizationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter customization name"
+        android:inputType="text"
+        android:padding="8dp"/>
+
+    <!-- Customization Price Input -->
+    <TextView
+        android:id="@+id/textViewCustomizationPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customization Price"
+        android:textSize="16sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/editTextCustomizationPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter customization price"
+        android:inputType="numberDecimal"
+        android:padding="8dp"/>
+
+</LinearLayout>
