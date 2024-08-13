@@ -63,12 +63,12 @@
         android:id="@+id/buttonUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update"
-        android:textStyle="bold"
-        android:textAllCaps="false"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:backgroundTint="#FF5722"
+        android:onClick="onClick"
+        android:text="Update"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:onClick="onClick"/>
+        android:textStyle="bold" />
 
 </LinearLayout>

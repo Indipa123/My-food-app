@@ -29,6 +29,12 @@ public class CartItem implements Serializable{
         this.quantity = quantity;
         this.image = image;
     }
+    public CartItem(int id, String name, double price, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
 
     // Existing getters and setters
 

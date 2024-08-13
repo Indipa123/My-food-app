@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 14);
+        super(context, DBNAME, null, 15);
     }
 
     @Override
@@ -33,13 +33,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 "address TEXT, " +
                 "profile_image BLOB)");
 
-        MyDB.execSQL("CREATE TABLE Orders(" +
+        MyDB.execSQL("CREATE TABLE Orders (" +
                 "orderId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "email TEXT, " +
                 "itemName TEXT, " +
                 "itemPrice TEXT, " +
-                "itemQuantity TEXT," +
-                "branch TEXT)");
+                "itemQuantity TEXT, " +
+                "branch TEXT, " +
+                "phone TEXT, " +
+                "paymentMethod TEXT, " + // New column for payment method
+                "customerLocation TEXT,"+ // New column for customer location
+                "FOREIGN KEY(email) REFERENCES Users(email))");
 
         MyDB.execSQL("CREATE TABLE finalOrder(" +
                 "cur_date DATE DEFAULT CURRENT_DATE, " +
@@ -748,4 +752,88 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update("customizations", values, "id = ?", new String[]{String.valueOf(customization.getId())});
         db.close();
     }
+    public List<CartItem> getCartItemByCartId(int cartId) {
+        List<CartItem> cartItems = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Cart WHERE id = ?", new String[]{String.valueOf(cartId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") int foodId = cursor.getInt(cursor.getColumnIndex("food_id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
+                @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+
+                CartItem item = new CartItem(id, name, price, quantity);
+                cartItems.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return cartItems;
+    }
+    @SuppressLint("Range")
+    public List<String> getAllBranchNames() {
+        List<String> branchNames = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT branchName FROM Branches", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                branchNames.add(cursor.getString(cursor.getColumnIndex("branchName")));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return branchNames;
+    }
+    public String getCustomerLocation(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("Users",
+                new String[]{"address"},
+                "email = ?",
+                new String[]{email},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") String address = cursor.getString(cursor.getColumnIndex("address"));
+            cursor.close();
+            return address;
+        }
+        return null;
+    }
+    public String getCustomerPhone(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("Users",
+                new String[]{"phoneNo"},
+                "email = ?",
+                new String[]{email},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") String phoneNo = cursor.getString(cursor.getColumnIndex("phoneNo"));
+            cursor.close();
+            return phoneNo;
+        }
+        return null;
+    }
+    public void addOrder(String email, String itemName, String itemPrice,
+                         String itemQuantity, String branch, String phone,
+                         String paymentMethod, String customerLocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("email", email);
+        values.put("itemName", itemName);
+        values.put("itemPrice", itemPrice);
+        values.put("itemQuantity", itemQuantity);
+        values.put("branch", branch);
+        values.put("phone", phone);
+        values.put("paymentMethod", paymentMethod);
+        values.put("customerLocation", customerLocation);
+
+        db.insert("Orders", null, values);
+        db.close();
+    }
+
 }
