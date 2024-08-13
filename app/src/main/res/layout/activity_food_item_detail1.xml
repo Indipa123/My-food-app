@@ -51,7 +51,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
         android:textColor="@android:color/black"
-        android:text="Available Customizations" />
+        android:text="Available Add-Ons" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCustomizations"
