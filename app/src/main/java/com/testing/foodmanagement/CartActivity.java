@@ -50,8 +50,7 @@ public class CartActivity extends AppCompatActivity {
 
         // Set a click listener for the checkout button
         buttonCheckout.setOnClickListener(v -> {
-            // Implement checkout logic here
-            // For example, navigate to a checkout screen or process the payment
+
         });
     }
 }

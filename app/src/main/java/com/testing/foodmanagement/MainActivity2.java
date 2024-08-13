@@ -1,9 +1,12 @@
 package com.testing.foodmanagement;
+import static android.content.ContentValues.TAG;
+
 import com.testing.foodmanagement.R;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +47,9 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activty_main2);
 
+        String email = getIntent().getStringExtra("EMAIL");
+        Log.d(TAG, "Received email: " + email);
+
         // Initialize the map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -63,6 +69,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         basketButton.setOnClickListener(view -> {
             // Create an Intent to start CartInfoActivity
             Intent intent = new Intent(MainActivity2.this, CartInfoActivity.class);
+            intent.putExtra("EMAIL", email);
             // Start the new activity
             startActivity(intent);
         });

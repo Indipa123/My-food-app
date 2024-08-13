@@ -156,6 +156,10 @@
             android:name=".AssignCustomizationActivity"
             android:exported="true"/>
 
+        <activity
+            android:name=".CheckoutActivity2"
+            android:exported="true"/>
+
 
         <!-- API Key meta-data -->
         <meta-data
