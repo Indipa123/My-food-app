@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 10);
+        super(context, DBNAME, null, 14);
     }
 
     @Override
@@ -573,14 +573,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return cartItemList;
     }
 
-    public void updateCartItem(int id, int newQuantity) {
+    public void updateCartItem(CartItem cartItem) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("quantity", newQuantity);
+        values.put("name", cartItem.getName());
+        values.put("price", cartItem.getPrice());
+        values.put("quantity", cartItem.getQuantity());
+        values.put("image", cartItem.getImage());
 
-        db.update("Cart", values, "id = ?", new String[]{String.valueOf(id)});
+        db.update("Cart", values, "id" + " = ?", new String[]{String.valueOf(cartItem.getId())});
         db.close();
     }
+
 
     public void deleteCartItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -647,6 +651,26 @@ public class DBHelper extends SQLiteOpenHelper {
         return lastName;
     }
 
+    public User getUserDetailsByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+        String query = "SELECT firstName, lastName, email, phoneNo, address, profile_image FROM Users WHERE email = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        if (cursor.moveToFirst()) {
+            @SuppressLint("Range") String firstName = cursor.getString(cursor.getColumnIndex("firstName"));
+            @SuppressLint("Range") String lastName = cursor.getString(cursor.getColumnIndex("lastName"));
+            @SuppressLint("Range") String emailField = cursor.getString(cursor.getColumnIndex("email"));
+            @SuppressLint("Range") String phoneNo = cursor.getString(cursor.getColumnIndex("phoneNo"));
+            @SuppressLint("Range") String address = cursor.getString(cursor.getColumnIndex("address"));
+            @SuppressLint("Range") byte[] imageBytes = cursor.getBlob(cursor.getColumnIndex("profile_image"));
+            Bitmap profileImage = imageBytes != null ? BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length) : null;
+
+            user = new User(firstName, lastName, emailField, phoneNo, address, profileImage);
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
 
 
 

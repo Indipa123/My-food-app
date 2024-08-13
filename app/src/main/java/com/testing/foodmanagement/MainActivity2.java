@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +56,16 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         cardViewFoodItems = findViewById(R.id.cardViewFoodItems);
         searchBar = findViewById(R.id.searchBar);
         searchEditText = findViewById(R.id.search_edit_text);
+        Button basketButton = findViewById(R.id.basket);
+
+        basketButton.setOnClickListener(view -> {
+            // Create an Intent to start CartInfoActivity
+            Intent intent = new Intent(MainActivity2.this, CartInfoActivity.class);
+            // Start the new activity
+            startActivity(intent);
+        });
+
+
 
         // Display recently added items
         displayRecentlyAddedItems();
@@ -80,6 +91,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
             }
             return false;
         });
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

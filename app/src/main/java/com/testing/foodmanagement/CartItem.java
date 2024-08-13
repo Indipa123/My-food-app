@@ -1,8 +1,9 @@
 package com.testing.foodmanagement;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CartItem {
+public class CartItem implements Serializable{
     private int id;
     private String name;
     private double price;

@@ -58,6 +58,13 @@ public class AccountActivity extends AppCompatActivity {
             }
         }
 
+        profileImageView.setOnClickListener(v -> {
+            // Navigate to ActivityUserInfo
+            Intent intent = new Intent(AccountActivity.this, ActivityUserInfo.class);
+            intent.putExtra("EMAIL", email);
+            startActivity(intent);
+        });
+
         // Set up buttons and other elements
         Button buttonFavourites = findViewById(R.id.buttonFavourites);
         Button buttonOrders = findViewById(R.id.buttonOrders);

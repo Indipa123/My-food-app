@@ -13,61 +13,58 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class FoodItemDetailActivity extends AppCompatActivity {
+public class FoodItemDetailActivity3 extends AppCompatActivity {
     private ImageView imageViewFoodItem;
     private TextView textViewFoodItemName;
     private TextView textViewFoodItemDescription;
     private TextView textViewFoodItemPrice;
     private RecyclerView recyclerViewCustomizations;
-    private Button buttonAddToBasket;
+    private Button buttonUpdate;
     private DBHelper dbHelper;
-    private FoodItem foodItem;
+    private CartItem cartItem;
     private CustomizationAdapterUser adapter;
 
     @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_item_detail1);
+        setContentView(R.layout.activity_food_item_detail3);
 
         imageViewFoodItem = findViewById(R.id.imageViewFoodItem);
         textViewFoodItemName = findViewById(R.id.textViewFoodItemName);
         textViewFoodItemDescription = findViewById(R.id.textViewFoodItemDescription);
         textViewFoodItemPrice = findViewById(R.id.textViewFoodItemPrice);
         recyclerViewCustomizations = findViewById(R.id.recyclerViewCustomizations);
-        buttonAddToBasket = findViewById(R.id.buttonAdd);
+        buttonUpdate = findViewById(R.id.buttonUpdate);
 
         dbHelper = new DBHelper(this);
 
         Intent intent = getIntent();
-        foodItem = (FoodItem) intent.getSerializableExtra("foodItem");
+        cartItem = (CartItem) intent.getSerializableExtra("cartItem");
 
-        if (foodItem != null) {
-            textViewFoodItemName.setText(foodItem.getName());
-            textViewFoodItemDescription.setText(foodItem.getDescription());
-            textViewFoodItemPrice.setText(String.format("RS %.2f", foodItem.getPrice()));
+        if (cartItem != null) {
+            textViewFoodItemName.setText(cartItem.getName());
+            textViewFoodItemPrice.setText(String.format("RS %.2f", cartItem.getPrice()));
 
-            byte[] imageByteArray = foodItem.getImage();
+            byte[] imageByteArray = cartItem.getImage();
             if (imageByteArray != null && imageByteArray.length > 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
                 imageViewFoodItem.setImageBitmap(bitmap);
             } else {
-                imageViewFoodItem.setImageResource(R.drawable.noodles);
+                imageViewFoodItem.setImageResource(R.drawable.noodles); // Change this to your placeholder image
             }
 
-            loadCustomizations();
+            loadCustomizations(cartItem.getId());
         }
 
-        buttonAddToBasket.setOnClickListener(v -> {
+        buttonUpdate.setOnClickListener(v -> {
             // Collect selected customizations
             List<Customization> selectedCustomizations = adapter.getSelectedCustomizations();
-            foodItem.setSelectedCustomizations(selectedCustomizations);
 
             // Build the name with customizations
-            StringBuilder customizedName = new StringBuilder(foodItem.getName());
+            StringBuilder customizedName = new StringBuilder(cartItem.getName());
             if (!selectedCustomizations.isEmpty()) {
                 customizedName.append(" with ");
                 for (int i = 0; i < selectedCustomizations.size(); i++) {
@@ -78,35 +75,37 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                 }
             }
 
-            // Create a CartItem with the updated name and other details
-            CartItem cartItem = new CartItem(
-                    foodItem.getId(), // food_id
+            // Create an updated CartItem with the new details
+            CartItem updatedCartItem = new CartItem(
+                    cartItem.getId(), // Use existing cart item ID
                     customizedName.toString(), // Name with customizations
-                    foodItem.getTotalPrice(),
-                    1, // Assuming quantity is 1 for simplicity
-                    foodItem.getImage(),
-                    selectedCustomizations
+                    calculateTotalPrice(cartItem.getPrice(), selectedCustomizations), // Update price with customizations
+                    cartItem.getQuantity(), // Retain existing quantity
+                    cartItem.getImage(), // Retain existing image
+                    selectedCustomizations // Set selected customizations
             );
-            dbHelper.addToCart(cartItem);
 
-            // Calculate the total price
-            double totalPrice = foodItem.getTotalPrice();
+            dbHelper.updateCartItem(updatedCartItem);
 
-            // Create an intent to pass data to CartActivity
-            Intent cartIntent = new Intent(FoodItemDetailActivity.this, CartActivity.class);
-            cartIntent.putExtra("cartItems", new ArrayList<FoodItem>() {{
-                add(foodItem);
-            }});
-            cartIntent.putExtra("totalPrice", totalPrice);
-
+            // Return to CartInfoActivity with the updated cart item
+            Intent cartIntent = new Intent(FoodItemDetailActivity3.this, CartInfoActivity.class);
             startActivity(cartIntent);
+            finish();
         });
     }
 
-    private void loadCustomizations() {
-        List<Customization> customizations = dbHelper.getCustomizationsForFoodItem(foodItem.getId());
+    private void loadCustomizations(int foodItemId) {
+        List<Customization> customizations = dbHelper.getCustomizationsForFoodItem(foodItemId);
         adapter = new CustomizationAdapterUser(this, customizations);
         recyclerViewCustomizations.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCustomizations.setAdapter(adapter);
+    }
+
+    private double calculateTotalPrice(double basePrice, List<Customization> customizations) {
+        double totalPrice = basePrice;
+        for (Customization customization : customizations) {
+            totalPrice += customization.getPrice();
+        }
+        return totalPrice;
     }
 }

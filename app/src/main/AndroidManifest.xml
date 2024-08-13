@@ -52,6 +52,14 @@
             android:name=".MainActivity2"
             android:exported="false"/>
 
+        <activity android:name=".CartInfoActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".FoodItemDetailActivity3"
+            android:exported="true"/>
+
+
         <activity
             android:name=".SearchActivity"
             android:exported="true"/>
@@ -59,6 +67,12 @@
         <activity
             android:name=".AccountActivity"
             android:exported="true"/>
+
+        <activity
+            android:name=".ActivityUserInfo"
+            android:exported="true"/>
+
+
         <activity
             android:name=".AddCategoryActivity"
             android:exported="false"/>
