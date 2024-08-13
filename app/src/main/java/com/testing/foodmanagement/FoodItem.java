@@ -9,19 +9,19 @@ public class FoodItem implements Serializable {
     private String category;
     private String description;
     private double price;
-    private String ingredients;
+
     private boolean available;
     private byte[] image;
     private List<Customization> selectedCustomizations; // List to store selected customizations
 
     // Constructor
-    public FoodItem(int id, String name, String category, String description, double price, String ingredients, boolean available, byte[] image) {
+    public FoodItem(int id, String name, String category, String description, double price, boolean available, byte[] image) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.description = description;
         this.price = price;
-        this.ingredients = ingredients;
+
         this.available = available;
         this.image = image;
     }
@@ -69,13 +69,9 @@ public class FoodItem implements Serializable {
         this.price = price;
     }
 
-    public String getIngredients() {
-        return ingredients;
-    }
 
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
-    }
+
+
 
     public boolean isAvailable() {
         return available;

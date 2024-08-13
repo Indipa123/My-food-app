@@ -55,7 +55,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "category TEXT, " +
                 "description TEXT, " +
                 "price REAL, " +
-                "ingredients TEXT, " +
                 "available INTEGER, " +
                 "image BLOB)");
 
@@ -211,7 +210,6 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("category", foodItem.getCategory());
         values.put("description", foodItem.getDescription());
         values.put("price", foodItem.getPrice());
-        values.put("ingredients", foodItem.getIngredients());
         values.put("available", foodItem.isAvailable() ? 1 : 0);
         values.put("image", foodItem.getImage());  // Store image as byte array
 
@@ -231,11 +229,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -345,7 +342,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -369,7 +366,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -393,7 +390,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -416,7 +413,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -515,7 +512,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                foodItem = new FoodItem(itemId, name, category, description, price, ingredients, available, image);
+                foodItem = new FoodItem(itemId, name, category, description, price, available, image);
             }
         } finally {
             if (cursor != null) {
