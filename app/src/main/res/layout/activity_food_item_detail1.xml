@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -33,14 +34,14 @@
 
     <TextView
         android:id="@+id/textViewFoodItemPrice"
-        android:layout_width="match_parent"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
         android:paddingTop="4dp"
         android:paddingBottom="8dp"
+        android:text="Price"
         android:textColor="@android:color/holo_red_dark"
-        android:text="Price" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewCustomizationsHeader"
@@ -61,14 +62,16 @@
 
     <Button
         android:id="@+id/buttonAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add to Basket"
-        android:textStyle="bold"
-        android:textAllCaps="false"
+        android:layout_width="387dp"
+        android:layout_height="61dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:backgroundTint="#FF5722"
+        android:onClick="onClick"
+        android:text="Add to Cart"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:onClick="onClick"/>
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:icon="@drawable/carttt" />
 
 </LinearLayout>
