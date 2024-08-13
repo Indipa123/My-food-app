@@ -271,6 +271,15 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
             textViewCategoryName.setText(promotion.getPromotionName());
 
+            categoryView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity2.this, ActivityPromotionDetails.class);
+                    intent.putExtra("categoryName", promotion.getPromotionName());
+                    startActivity(intent);
+                }
+            });
+
             linearLayoutPromotions.addView(categoryView);
         }
     }

@@ -1,5 +1,6 @@
 package com.testing.foodmanagement;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -33,13 +34,22 @@ public class CartInfoActivity extends AppCompatActivity {
         // Calculate and display the total price
         updateTotalPrice();
 
-        // Setup the RecyclerView with the CartAdapter
+        // Setup the RecyclerView with the CartInfoAdapter
         cartInfoAdapter = new CartInfoAdapter(this, cartItemList, dbHelper, new CartInfoAdapter.OnItemChangeListener() {
             @Override
             public void onItemDeleted() {
                 updateTotalPrice();
             }
+        }, new CartInfoAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int cartId) {
+                // Navigate to CheckoutActivity with the selected Cart ID
+                Intent intent = new Intent(CartInfoActivity.this, CheckoutActivity.class);
+                intent.putExtra("cartId", cartId);
+                startActivity(intent);
+            }
         });
+
         recyclerViewCartItems.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCartItems.setAdapter(cartInfoAdapter);
     }

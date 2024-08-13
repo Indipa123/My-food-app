@@ -1,8 +1,6 @@
 package com.testing.foodmanagement;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,11 +27,17 @@ public class CartActivity extends AppCompatActivity {
         textViewTotalPrice = findViewById(R.id.textViewTotalPrice);
         buttonCheckout = findViewById(R.id.buttonCheckout);
 
+        dbHelper = new DBHelper(this);
+
+        // Fetch cart items from the database if needed
+        // cartItems = dbHelper.getAllCartItems();
+
         // Get the data passed from the previous activity
         Intent intent = getIntent();
-        if (intent.hasExtra("cartItems")) {
+        if (intent != null && intent.hasExtra("cartItems")) {
             cartItems = (List<FoodItem>) intent.getSerializableExtra("cartItems");
         }
+
         double totalPrice = intent.getDoubleExtra("totalPrice", 0.0);
 
         // Set up the RecyclerView

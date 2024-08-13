@@ -112,9 +112,13 @@
             android:name=".AddPromotionActivity"
             android:exported="true"/>
 
+        <activity
+            android:name=".ActivityPromotionDetails"
+            android:exported="true"/>
 
-
-
+        <activity
+            android:name=".CheckoutActivity"
+            android:exported="true"/>
 
 
         <!-- Admin dashboard activity -->
