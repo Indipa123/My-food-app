@@ -17,9 +17,6 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DBNAME = "Canteen.db";
-    private static final String TABLE_USERS = "Users";
-    private static final String COLUMN_EMAIL = "email";
-    private static final String COLUMN_PROFILE_IMAGE = "profile_image";
 
     public DBHelper(Context context) {
         super(context, DBNAME, null, 14);
