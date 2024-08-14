@@ -44,6 +44,12 @@ public class PendingOrdersActivity extends AppCompatActivity {
                 order.setCustomerLocation(cursor.getString(cursor.getColumnIndexOrThrow("customerLocation")));
                 order.setPhone(cursor.getString(cursor.getColumnIndexOrThrow("phone")));
 
+                String status = cursor.getString(cursor.getColumnIndexOrThrow("status"));
+                if (status == null || status.isEmpty()) {
+                    status = "Pending"; // Default status
+                }
+                order.setStatus(status);
+
 
 
                 // Additional fields if necessary

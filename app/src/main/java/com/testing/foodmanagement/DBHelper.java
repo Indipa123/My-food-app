@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 18);
+        super(context, DBNAME, null, 19);
     }
 
     @Override

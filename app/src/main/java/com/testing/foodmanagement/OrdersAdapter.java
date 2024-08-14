@@ -116,7 +116,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 // Insert the confirmed order into the finalOrder table
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
-                values.put("email", dbHelper.getUserEmail(String.valueOf(order.getOrderId()))); // Assuming email retrieval is required
+                values.put("email", dbHelper.getUserEmail(String.valueOf(order.getPhone()))); // Assuming email retrieval is required
                 values.put("orderName", order.getItemName());
                 values.put("orderQuantity", order.getItemQuantity());
                 values.put("orderPrice", order.getItemPrice());

@@ -10,6 +10,7 @@ public class Order {
     private String phone;
     private String paymentMethod;
     private String customerLocation;
+    private String status;
 
     public Order(int orderId, String email, String itemName, String itemPrice, String itemQuantity, String branch, String phone, String paymentMethod, String customerLocation) {
         this.orderId = orderId;
@@ -108,6 +109,14 @@ public class Order {
 
     public void setCustomerLocation(String customerLocation) {
         this.customerLocation = customerLocation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
