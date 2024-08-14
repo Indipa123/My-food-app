@@ -69,10 +69,19 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         searchBar = findViewById(R.id.searchBar);
         searchEditText = findViewById(R.id.search_edit_text);
         Button basketButton = findViewById(R.id.basket);
+        Button rating = findViewById(R.id.rating);
 
         basketButton.setOnClickListener(view -> {
             // Create an Intent to start CartInfoActivity
             Intent intent = new Intent(MainActivity2.this, CartInfoActivity.class);
+            intent.putExtra("EMAIL", email);
+            // Start the new activity
+            startActivity(intent);
+        });
+
+        rating.setOnClickListener(view -> {
+            // Create an Intent to start CartInfoActivity
+            Intent intent = new Intent(MainActivity2.this, RatingCommentActivity.class);
             intent.putExtra("EMAIL", email);
             // Start the new activity
             startActivity(intent);

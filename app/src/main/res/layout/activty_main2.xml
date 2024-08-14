@@ -103,29 +103,11 @@
 
                     <!-- Add more filter buttons to test scrolling -->
                     <Button
+                        android:id="@+id/rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New Button 1"
+                        android:text="Ratings/Comments"
                         android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New Button 2"
-                        android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New Button 3"
-                        android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New Button 4"
-                        android:layout_marginEnd="8dp" />
-
 
 
                 </LinearLayout>
