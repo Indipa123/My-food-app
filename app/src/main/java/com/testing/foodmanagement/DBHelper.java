@@ -851,5 +851,42 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert("Orders", null, values);
         db.close();
     }
+    public String getOrderDetails(int orderId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("Orders", null, "orderId=?", new String[]{String.valueOf(orderId)}, null, null, null);
+
+        StringBuilder orderDetails = new StringBuilder();
+        if (cursor != null && cursor.moveToFirst()) {
+            String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
+            String itemName = cursor.getString(cursor.getColumnIndexOrThrow("itemName"));
+            String itemPrice = cursor.getString(cursor.getColumnIndexOrThrow("itemPrice"));
+            String itemQuantity = cursor.getString(cursor.getColumnIndexOrThrow("itemQuantity"));
+            String branch = cursor.getString(cursor.getColumnIndexOrThrow("branch"));
+            String phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
+            String paymentMethod = cursor.getString(cursor.getColumnIndexOrThrow("paymentMethod"));
+            String customerLocation = cursor.getString(cursor.getColumnIndexOrThrow("customerLocation"));
+
+            orderDetails.append("Order ID: ").append(orderId).append("\n")
+                    .append("Email: ").append(email).append("\n")
+                    .append("Item: ").append(itemName).append("\n")
+                    .append("Price: ").append(itemPrice).append("\n")
+                    .append("Quantity: ").append(itemQuantity).append("\n")
+                    .append("Branch: ").append(branch).append("\n")
+                    .append("Phone: ").append(phone).append("\n")
+                    .append("Payment Method: ").append(paymentMethod).append("\n")
+                    .append("Location: ").append(customerLocation).append("\n");
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+        return orderDetails.toString();
+    }
+    public void cancelOrder(int orderId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Orders", "orderId=?", new String[]{String.valueOf(orderId)});
+        db.close();
+    }
 
 }
