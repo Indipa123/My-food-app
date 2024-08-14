@@ -110,6 +110,8 @@
                         android:layout_marginEnd="8dp" />
 
 
+
+
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -135,6 +137,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="16dp"
                         android:text="Categories"
+                        android:textColor="#FF5722"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -155,6 +158,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="16dp"
                         android:text="Food Items"
+                        android:textColor="#FF5722"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -178,10 +182,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
                 android:text="Promotions"
+                android:textColor="#FF5722"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingBottom="16dp" />
+                android:textStyle="bold" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -200,10 +205,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
                 android:text="Restaurants Near You"
+                android:textColor="#FF5722"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingBottom="16dp" />
+                android:textStyle="bold" />
 
             <fragment
                 android:id="@+id/map"
