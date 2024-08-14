@@ -41,6 +41,7 @@ public class AddBranchActivity extends AppCompatActivity {
             Intent intent = new Intent(AddBranchActivity.this, SelectLocationActivity.class);
             startActivityForResult(intent, 1);
         });
+
         registerBranchButton.setOnClickListener(v -> {
             // Register branch with the details
             String branchName = branchNameEditText.getText().toString().trim();
@@ -61,12 +62,16 @@ public class AddBranchActivity extends AppCompatActivity {
 
             if (isInserted) {
                 Toast.makeText(this, "Branch added successfully", Toast.LENGTH_SHORT).show();
+                // Go back to Admin Dashboard Activity
+                Intent intent = new Intent(AddBranchActivity.this, AdminDashboardActivity.class);
+                startActivity(intent);
+                finish(); // Optionally finish this activity so it's removed from the back stack
             } else {
                 Toast.makeText(this, "Failed to add branch", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -83,6 +88,4 @@ public class AddBranchActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
