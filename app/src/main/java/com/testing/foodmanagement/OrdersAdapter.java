@@ -1,8 +1,10 @@
 package com.testing.foodmanagement;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +96,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             this.order = order;
         }
 
-
         @Override
         protected Boolean doInBackground(String... params) {
             String to = params[0];
@@ -112,12 +113,37 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                ordersList.remove(order);
-                notifyDataSetChanged();
-                Toast.makeText(context, "Order Confirmed", Toast.LENGTH_SHORT).show();
+                // Insert the confirmed order into the finalOrder table
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put("email", dbHelper.getUserEmail(String.valueOf(order.getOrderId()))); // Assuming email retrieval is required
+                values.put("orderName", order.getItemName());
+                values.put("orderQuantity", order.getItemQuantity());
+                values.put("orderPrice", order.getItemPrice());
+
+                long insertId = db.insert("finalOrder", null, values);
+
+                if (insertId != -1) {
+                    // Successfully inserted into finalOrder table
+                    // Log the order ID that is about to be deleted
+                    Log.d("OrdersAdapter", "Deleting order with ID: " + order.getOrderId());
+                    ordersList.remove(order);
+                    notifyDataSetChanged();
+
+                    // Assuming there is a method in dbHelper to delete an order
+                    dbHelper.deleteOrderById(order.getOrderId());
+
+                    Toast.makeText(context, "Order Confirmed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Failed to save order in finalOrder", Toast.LENGTH_SHORT).show();
+                }
+
+                db.close();
             } else {
                 Toast.makeText(context, "Failed to send email", Toast.LENGTH_SHORT).show();
             }
         }
+
+
     }
 }

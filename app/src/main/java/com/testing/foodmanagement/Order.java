@@ -23,13 +23,18 @@ public class Order {
         this.customerLocation = customerLocation;
     }
 
-    public Order(String name, String price, String quantity, String branch, String phone, String customerLocation) {
+    public Order(int orderId, String name, String price, String quantity, String branch, String phone, String customerLocation) {
+        this.orderId = orderId;
         this.itemName = name;
         this.itemPrice = price;
         this.itemQuantity = quantity;
         this.branch = branch;
         this.phone = phone;
         this.customerLocation = customerLocation;
+    }
+
+    public Order() {
+
     }
 
 

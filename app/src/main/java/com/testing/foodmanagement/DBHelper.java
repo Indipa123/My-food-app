@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 17);
+        super(context, DBNAME, null, 18);
     }
 
     @Override
@@ -835,17 +835,18 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<Order> getAllOrders() {
         ArrayList<Order> ordersList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT itemName, itemPrice, itemQuantity, branch, phone, customerLocation FROM Orders", null);
+        Cursor cursor = db.rawQuery("SELECT orderId, itemName, itemPrice, itemQuantity, branch, phone, customerLocation FROM Orders", null);
 
         if (cursor.moveToFirst()) {
             do {
                 ordersList.add(new Order(
-                        cursor.getString(0),  // itemName
-                        cursor.getString(1),  // itemPrice
-                        cursor.getString(2),  // itemQuantity
-                        cursor.getString(3),  // branch
-                        cursor.getString(4),  // phone
-                        cursor.getString(5)   // customerLocation
+                        cursor.getInt(0),
+                        cursor.getString(1),  // itemName
+                        cursor.getString(2),  // itemPrice
+                        cursor.getString(3),  // itemQuantity
+                        cursor.getString(4),  // branch
+                        cursor.getString(5),  // phone
+                        cursor.getString(6)   // customerLocation
                 ));
             } while (cursor.moveToNext());
         }
@@ -861,12 +862,13 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 ordersList.add(new Order(
-                        cursor.getString(0),  // itemName
-                        cursor.getString(1),  // itemPrice
-                        cursor.getString(2),  // itemQuantity
-                        cursor.getString(3),  // branch
-                        cursor.getString(4),  // phone
-                        cursor.getString(5)   // customerLocation
+                        cursor.getInt(0),
+                        cursor.getString(1),  // itemName
+                        cursor.getString(2),  // itemPrice
+                        cursor.getString(3),  // itemQuantity
+                        cursor.getString(4),  // branch
+                        cursor.getString(5),  // phone
+                        cursor.getString(6)   // customerLocation
                 ));
             } while (cursor.moveToNext());
         }
@@ -947,6 +949,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return email;
     }
 
+    public void deleteOrderById(int orderId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = "orderId = ?";
+        String[] whereArgs = { String.valueOf(orderId) };
+        int rowsDeleted = db.delete("orders", whereClause, whereArgs);
+        db.close();
 
+        // Optionally, log or return the number of rows deleted
+        Log.d("DBHelper", "Rows deleted: " + rowsDeleted);
+    }
 
 }
