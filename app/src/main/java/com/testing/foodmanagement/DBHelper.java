@@ -291,25 +291,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean addBranch(Branch branch) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("branchName", branch.getBranchName());
-        contentValues.put("phone", branch.getPhone());
-        contentValues.put("email", branch.getEmail());
-        contentValues.put("openHours", branch.getOpenHours());
-        contentValues.put("location", branch.getLocation()); // Save address as location
+        ContentValues values = new ContentValues();
+        values.put("branchName", branch.getBranchName());
+        values.put("phone", branch.getPhone());
+        values.put("email", branch.getEmail());
+        values.put("openHours", branch.getOpenHours());
+        values.put("location", branch.getLocation());
 
-        long result = db.insert("branches", null, contentValues);
+        long result = db.insert("Branches", null, values);
         db.close();
         return result != -1;
     }
-
-
 
     public List<Branch> getAllBranches() {
         List<Branch> branchList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Branches", null);
-
         if (cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") String branchName = cursor.getString(cursor.getColumnIndex("branchName"));
@@ -318,8 +315,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String openHours = cursor.getString(cursor.getColumnIndex("openHours"));
                 @SuppressLint("Range") String location = cursor.getString(cursor.getColumnIndex("location"));
 
-
-                Branch branch = new Branch(branchName, phone, email, openHours, location);  // Create Branch object with address
+                Branch branch = new Branch(branchName, phone, email, openHours, location);
                 branchList.add(branch);
             } while (cursor.moveToNext());
         }
@@ -327,10 +323,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return branchList;
     }
-
-
-
-
 
     public List<FoodItem> getLastFiveAddedFoodItems() {
         List<FoodItem> foodItemList = new ArrayList<>();
@@ -345,13 +337,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "id DESC",
                 "5"
         );
-
         if (cursor.moveToFirst()) {
-            String[] columnNames = cursor.getColumnNames();
-            for (String columnName : columnNames) {
-                Log.d("DBHelper", "Column: " + columnName);
-            }
-
             do {
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
@@ -364,15 +350,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
-        } else {
-            Log.d("DBHelper", "Cursor is empty or could not move to the first item.");
         }
-
         cursor.close();
         db.close();
         return foodItemList;
     }
-
 
     public List<FoodItem> getFoodItemsByCategory(String categoryName) {
         List<FoodItem> foodItemList = new ArrayList<>();
@@ -787,7 +769,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return cartItems;
     }
-
     @SuppressLint("Range")
     public List<String> getAllBranchNames() {
         List<String> branchNames = new ArrayList<>();
@@ -803,7 +784,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return branchNames;
     }
-
     public String getCustomerLocation(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("Users",
@@ -852,6 +832,49 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert("Orders", null, values);
         db.close();
     }
+    public ArrayList<Order> getAllOrders() {
+        ArrayList<Order> ordersList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT itemName, itemPrice, itemQuantity, branch, phone, customerLocation FROM Orders", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ordersList.add(new Order(
+                        cursor.getString(0),  // itemName
+                        cursor.getString(1),  // itemPrice
+                        cursor.getString(2),  // itemQuantity
+                        cursor.getString(3),  // branch
+                        cursor.getString(4),  // phone
+                        cursor.getString(5)   // customerLocation
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ordersList;
+    }
+
+    public ArrayList<Order> getOrdersByBranch(String branch) {
+        ArrayList<Order> ordersList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT itemName, itemPrice, itemQuantity, branch, phone, customerLocation FROM Orders WHERE branch = ?", new String[]{branch});
+
+        if (cursor.moveToFirst()) {
+            do {
+                ordersList.add(new Order(
+                        cursor.getString(0),  // itemName
+                        cursor.getString(1),  // itemPrice
+                        cursor.getString(2),  // itemQuantity
+                        cursor.getString(3),  // branch
+                        cursor.getString(4),  // phone
+                        cursor.getString(5)   // customerLocation
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ordersList;
+    }
+
+
     public String getOrderDetails(int orderId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("Orders", null, "orderId=?", new String[]{String.valueOf(orderId)}, null, null, null);
