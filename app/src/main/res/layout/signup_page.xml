@@ -23,7 +23,7 @@
                 android:id="@+id/imageView3"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/logooooo" />
+                app:srcCompat="@drawable/happy_plates_logo" />
 
             <TextView
                 android:id="@+id/textView4"

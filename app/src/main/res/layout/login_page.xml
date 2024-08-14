@@ -16,9 +16,9 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/logooooo" />
+            android:layout_width="75dp"
+            android:layout_height="80dp"
+            app:srcCompat="@drawable/happy_plates_logo" />
 
         <TextView
             android:id="@+id/textView4"
