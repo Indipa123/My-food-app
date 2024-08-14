@@ -23,16 +23,15 @@ public class Order {
         this.customerLocation = customerLocation;
     }
 
-    public Order(String email, String itemName, String itemPrice, String itemQuantity, String branch, String phone, String paymentMethod, String customerLocation) {
-        this.email = email;
-        this.itemName = itemName;
-        this.itemPrice = itemPrice;
-        this.itemQuantity = itemQuantity;
+    public Order(String name, String price, String quantity, String branch, String phone, String customerLocation) {
+        this.itemName = name;
+        this.itemPrice = price;
+        this.itemQuantity = quantity;
         this.branch = branch;
         this.phone = phone;
-        this.paymentMethod = paymentMethod;
         this.customerLocation = customerLocation;
     }
+
 
     public int getOrderId() {
         return orderId;

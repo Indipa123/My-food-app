@@ -38,7 +38,7 @@ public class OrdersActivity extends AppCompatActivity {
         ordersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ordersList = dbHelper.getAllOrders();
-        ordersAdapter = new OrdersAdapter(ordersList, dbHelper.getWritableDatabase());
+        ordersAdapter = new OrdersAdapter(this, ordersList, dbHelper.getWritableDatabase());
         ordersRecyclerView.setAdapter(ordersAdapter);
 
         // Set up the filter functionality by branch

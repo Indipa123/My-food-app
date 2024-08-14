@@ -933,4 +933,19 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public String getUserEmail(String phoneNumber) {
+        String email = null;
+        SQLiteDatabase db = this.getReadableDatabase(); // Get readable database instance
+        Cursor cursor = db.rawQuery("SELECT email FROM Users WHERE phoneNo = ?", new String[]{phoneNumber});
+        if (cursor != null && cursor.moveToFirst()) {
+            email = cursor.getString(cursor.getColumnIndex("email"));
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return email;
+    }
+
+
+
 }

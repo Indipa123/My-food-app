@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="@drawable/border"> <!-- Set the background here -->
+    android:background="@drawable/border">
 
     <TextView
         android:id="@+id/item_name"
@@ -44,31 +44,12 @@
         android:layout_height="wrap_content"
         android:text="Customer Location" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/confirm_order_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <Button
-            android:id="@+id/update_order_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Update"
-            android:background="@drawable/button_background"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/purple_200"/>
-
-        <Button
-            android:id="@+id/delete_order_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delete"
-            android:background="@drawable/button_background"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/holo_red_dark"/>
-    </LinearLayout>
+        android:text="Confirm Order"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
