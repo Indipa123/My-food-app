@@ -97,5 +97,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(AdminDashboardActivity.this, AddPromotionActivity.class);
             startActivity(intent);
         });
+
+        CardView BranchCard = findViewById(R.id.shippercard);
+
+        BranchCard.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, PendingOrdersActivity.class);
+            startActivity(intent);
+        });
     }
 }

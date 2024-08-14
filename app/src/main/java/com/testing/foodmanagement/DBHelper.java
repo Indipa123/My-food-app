@@ -1,5 +1,8 @@
 package com.testing.foodmanagement;
 
+import static android.app.DownloadManager.COLUMN_ID;
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 19);
+        super(context, DBNAME, null, 21);
     }
 
     @Override
@@ -46,6 +49,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(email) REFERENCES Users(email))");
 
         MyDB.execSQL("CREATE TABLE finalOrder(" +
+                "orderPId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "cur_date DATE DEFAULT CURRENT_DATE, " +
                 "cur_time TIME DEFAULT CURRENT_TIME, " +
                 "email TEXT, " +
@@ -132,6 +136,25 @@ public class DBHelper extends SQLiteOpenHelper {
         MyDB.execSQL("DROP TABLE IF EXISTS Promotions");
         onCreate(MyDB);
     }
+
+    public boolean updateOrderStatus(int orderPId, String status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("status", status);
+        int rowsAffected = db.update("finalOrder", contentValues, "orderPId" + " = ?", new String[]{String.valueOf(orderPId)});
+        db.close();
+        return rowsAffected > 0;
+    }
+
+    public Cursor getOrderDetailsByEmail(String userEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM finalOrder WHERE email = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{userEmail});
+        return cursor;
+    }
+
+
+
 
     public long addPromotion(String promotionName, String promotionCode, String description,
                              String promotionStartDate, String promotionEndDate,
@@ -965,16 +988,14 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("DBHelper", "Rows deleted: " + rowsDeleted);
     }
 
-    public Cursor getPendingOrder() {
-        SQLiteDatabase db = this.getReadableDatabase(); // Replace 'this' with your actual context or database instance
-        String query = "SELECT * FROM finalOrder WHERE status = ?";
-        String[] selectionArgs = new String[]{"Pending"};
-
-        // Execute the query
-        Cursor cursor = db.rawQuery(query, selectionArgs);
-
-        return cursor;
+    public Cursor getPendingOrders() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM finalOrder WHERE status = 'Pending'";
+        return db.rawQuery(query, null);
     }
+
+
+
 
 
 }

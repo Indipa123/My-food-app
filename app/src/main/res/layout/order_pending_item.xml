@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/noOrdersMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="No pending orders"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/orderName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Order Name" />
+
+    <TextView
+        android:id="@+id/orderDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order Details" />
+
+    <TextView
+        android:id="@+id/orderDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date and Time" />
+
+    <TextView
+        android:id="@+id/customerInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer Info" />
+
+    <TextView
+        android:id="@+id/branch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Branch" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status" />
+
+    <!-- Add buttons for each order status -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnOrderReceived"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Order Received"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnOrderPreparing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Order Preparing"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp" />
+
+        <Button
+            android:id="@+id/btnReadyForPickup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ready for Pickup"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp" />
+    </LinearLayout>
+
+</LinearLayout>

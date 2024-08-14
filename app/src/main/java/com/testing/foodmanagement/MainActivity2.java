@@ -10,7 +10,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -81,7 +79,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
         rating.setOnClickListener(view -> {
             // Create an Intent to start CartInfoActivity
-            Intent intent = new Intent(MainActivity2.this, RatingCommentActivity.class);
+            Intent intent = new Intent(MainActivity2.this, PendingOrdersActivity2.class);
             intent.putExtra("EMAIL", email);
             // Start the new activity
             startActivity(intent);

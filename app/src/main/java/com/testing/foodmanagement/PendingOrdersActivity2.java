@@ -5,19 +5,22 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
-public class PendingOrdersActivity extends AppCompatActivity {
+public class PendingOrdersActivity2 extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private OrdersPendingAdapter ordersPendingAdapter;
+    private OrdersPendingAdapter2 ordersPendingAdapter2;
     private ArrayList<OrderPending> ordersPendingList;
     private DBHelper dbHelper;
     private TextView noOrdersMessage;  // Ensure this view is declared
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +33,8 @@ public class PendingOrdersActivity extends AppCompatActivity {
         ordersPendingList = new ArrayList<>();
         dbHelper = new DBHelper(this);
 
-        ordersPendingAdapter = new OrdersPendingAdapter(this, ordersPendingList);
-        recyclerView.setAdapter(ordersPendingAdapter);
+        ordersPendingAdapter2 = new OrdersPendingAdapter2(this, ordersPendingList);
+        recyclerView.setAdapter(ordersPendingAdapter2);
 
         loadPendingOrders(); // Load data initially
     }
@@ -78,6 +81,6 @@ public class PendingOrdersActivity extends AppCompatActivity {
             ordersPendingList.add(orderPending);
         }
         cursor.close();
-        ordersPendingAdapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
+        ordersPendingAdapter2.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }
