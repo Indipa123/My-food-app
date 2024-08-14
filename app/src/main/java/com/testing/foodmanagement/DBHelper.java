@@ -838,5 +838,48 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert("Orders", null, values);
         db.close();
     }
+    public ArrayList<Order> getAllOrders() {
+        ArrayList<Order> ordersList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT itemName, itemPrice, itemQuantity, branch, phone, customerLocation FROM Orders", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ordersList.add(new Order(
+                        cursor.getString(0),  // itemName
+                        cursor.getString(1),  // itemPrice
+                        cursor.getString(2),  // itemQuantity
+                        cursor.getString(3),  // branch
+                        cursor.getString(4),  // phone
+                        cursor.getString(5)   // customerLocation
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ordersList;
+    }
+
+    public ArrayList<Order> getOrdersByBranch(String branch) {
+        ArrayList<Order> ordersList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT itemName, itemPrice, itemQuantity, branch, phone, customerLocation FROM Orders WHERE branch = ?", new String[]{branch});
+
+        if (cursor.moveToFirst()) {
+            do {
+                ordersList.add(new Order(
+                        cursor.getString(0),  // itemName
+                        cursor.getString(1),  // itemPrice
+                        cursor.getString(2),  // itemQuantity
+                        cursor.getString(3),  // branch
+                        cursor.getString(4),  // phone
+                        cursor.getString(5)   // customerLocation
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ordersList;
+    }
+
+
 
 }

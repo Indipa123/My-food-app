@@ -29,6 +29,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
+        CardView orderCard = findViewById(R.id.ordercard);
+        orderCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminDashboardActivity.this, OrdersActivity.class);
+                startActivity(intent);
+            }
+        });
+
         CardView viewCateCard = findViewById(R.id.card_view_categories);
         viewCateCard.setOnClickListener(new View.OnClickListener() {
             @Override
