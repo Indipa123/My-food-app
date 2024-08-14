@@ -137,9 +137,14 @@ public class AddPromotionActivity extends AppCompatActivity {
 
     private void sendPromotionEmails(String promotionCode) {
         List<String> emails = dbHelper.getAllUserEmails();
-        String subject = "New Promotion Available!";
-        String body = "Use the following promotion code to get a discount: " + promotionCode;
-
+        String subject = "Exciting New Offer Just for You!";
+        String body = "Dear Valued Customer,\n\n" +
+                "We're thrilled to share an exclusive promotion with you! As a token of our appreciation, we're offering a special discount just for our loyal customers.\n\n" +
+                "Use the promotion code **" + promotionCode + "** at checkout to enjoy a fantastic discount on your next meal with us.\n\n" +
+                "This offer is valid for a limited time, so don't miss out on the chance to indulge in your favorite dishes at a great price.\n\n" +
+                "We look forward to serving you soon!\n\n" +
+                "Best regards,\n" +
+                "The Happy Plates Team";
         for (String email : emails) {
             new Thread(() -> EmailHelper.sendEmail(email, subject, body)).start();
         }

@@ -1,7 +1,10 @@
 package com.testing.foodmanagement;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,9 @@ public class CartInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_info);
+
+        String email = getIntent().getStringExtra("EMAIL");
+        Log.d(TAG, "Received email: " + email);
 
         recyclerViewCartItems = findViewById(R.id.recyclerViewCartItems);
         textViewTotalPrice = findViewById(R.id.textViewTotalPrice);
@@ -46,6 +52,7 @@ public class CartInfoActivity extends AppCompatActivity {
                 // Navigate to CheckoutActivity with the selected Cart ID
                 Intent intent = new Intent(CartInfoActivity.this, CheckoutActivity.class);
                 intent.putExtra("cartId", cartId);
+                intent.putExtra("EMAIL", email);
                 startActivity(intent);
             }
         });

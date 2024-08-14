@@ -27,7 +27,7 @@ import java.io.InputStream;
 public class AddMenuActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 1;
-    private EditText editTextName, editTextCategory, editTextDescription, editTextPrice, editTextIngredients;
+    private EditText editTextName, editTextCategory, editTextDescription, editTextPrice;
     private CheckBox checkBoxAvailable;
     private ImageView imageView;
     private Bitmap selectedImageBitmap;
@@ -41,7 +41,6 @@ public class AddMenuActivity extends AppCompatActivity {
         editTextCategory = findViewById(R.id.editTextCategory);
         editTextDescription = findViewById(R.id.editTextDescription);
         editTextPrice = findViewById(R.id.editTextPrice);
-        editTextIngredients = findViewById(R.id.editTextIngredients);
         checkBoxAvailable = findViewById(R.id.checkBoxAvailable);
         imageView = findViewById(R.id.addFoodimage);
         Button buttonSelectImage = findViewById(R.id.buttonSelectImage);
@@ -159,10 +158,9 @@ public class AddMenuActivity extends AppCompatActivity {
         String category = editTextCategory.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
         String priceString = editTextPrice.getText().toString().trim();
-        String ingredients = editTextIngredients.getText().toString().trim();
         boolean available = checkBoxAvailable.isChecked();
 
-        if (name.isEmpty() || category.isEmpty() || description.isEmpty() || priceString.isEmpty() || ingredients.isEmpty() || selectedImageBitmap == null) {
+        if (name.isEmpty() || category.isEmpty() || description.isEmpty() || priceString.isEmpty() || selectedImageBitmap == null) {
             Toast.makeText(this, "Please fill all fields and select an image.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -172,7 +170,7 @@ public class AddMenuActivity extends AppCompatActivity {
 
         // Save the data to your database here
         DBHelper dbHelper = new DBHelper(this);
-        int foodId = dbHelper.addFoodItem(new FoodItem(0, name, category, description, price, ingredients, available, imageByteArray));
+        int foodId = dbHelper.addFoodItem(new FoodItem(0, name, category, description, price, available, imageByteArray));
 
         if (foodId != -1) {
             Toast.makeText(this, "Item added successfully!", Toast.LENGTH_SHORT).show();
