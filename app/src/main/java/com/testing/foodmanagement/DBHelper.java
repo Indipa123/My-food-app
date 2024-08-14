@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 15);
+        super(context, DBNAME, null, 17);
     }
 
     @Override
@@ -67,7 +67,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "phone TEXT, " +
                 "email TEXT, " +
                 "openHours TEXT, " +
-                "location TEXT)");
+                "location TEXT)"); // Added the address column
+
+
 
         MyDB.execSQL("CREATE TABLE Categories(" +
                 "categoryId INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -289,22 +291,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean addBranch(Branch branch) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("branchName", branch.getBranchName());
-        values.put("phone", branch.getPhone());
-        values.put("email", branch.getEmail());
-        values.put("openHours", branch.getOpenHours());
-        values.put("location", branch.getLocation());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("branchName", branch.getBranchName());
+        contentValues.put("phone", branch.getPhone());
+        contentValues.put("email", branch.getEmail());
+        contentValues.put("openHours", branch.getOpenHours());
+        contentValues.put("location", branch.getLocation()); // Save address as location
 
-        long result = db.insert("Branches", null, values);
+        long result = db.insert("branches", null, contentValues);
         db.close();
         return result != -1;
     }
+
+
 
     public List<Branch> getAllBranches() {
         List<Branch> branchList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Branches", null);
+
         if (cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") String branchName = cursor.getString(cursor.getColumnIndex("branchName"));
@@ -313,7 +318,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String openHours = cursor.getString(cursor.getColumnIndex("openHours"));
                 @SuppressLint("Range") String location = cursor.getString(cursor.getColumnIndex("location"));
 
-                Branch branch = new Branch(branchName, phone, email, openHours, location);
+
+                Branch branch = new Branch(branchName, phone, email, openHours, location);  // Create Branch object with address
                 branchList.add(branch);
             } while (cursor.moveToNext());
         }
@@ -321,6 +327,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return branchList;
     }
+
+
+
+
 
     public List<FoodItem> getLastFiveAddedFoodItems() {
         List<FoodItem> foodItemList = new ArrayList<>();
@@ -335,25 +345,34 @@ public class DBHelper extends SQLiteOpenHelper {
                 "id DESC",
                 "5"
         );
+
         if (cursor.moveToFirst()) {
+            String[] columnNames = cursor.getColumnNames();
+            for (String columnName : columnNames) {
+                Log.d("DBHelper", "Column: " + columnName);
+            }
+
             do {
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
                 FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
+        } else {
+            Log.d("DBHelper", "Cursor is empty or could not move to the first item.");
         }
+
         cursor.close();
         db.close();
         return foodItemList;
     }
+
 
     public List<FoodItem> getFoodItemsByCategory(String categoryName) {
         List<FoodItem> foodItemList = new ArrayList<>();
@@ -366,7 +385,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
@@ -390,7 +408,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
@@ -413,7 +430,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
@@ -512,7 +528,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
@@ -772,6 +787,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return cartItems;
     }
+
     @SuppressLint("Range")
     public List<String> getAllBranchNames() {
         List<String> branchNames = new ArrayList<>();
@@ -787,6 +803,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return branchNames;
     }
+
     public String getCustomerLocation(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("Users",
