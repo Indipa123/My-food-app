@@ -14,9 +14,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // Find the CardView for adding a menu
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) CardView cardViewMenu;
-        cardViewMenu = findViewById(R.id.card_view_menu);
+
 
         // Set a click listener on the CardView
 
@@ -47,7 +45,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
-        cardViewMenu.setOnClickListener(new View.OnClickListener() {
+        CardView viewMenuCard = findViewById(R.id.card_view_menu);
+        viewMenuCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Start the AddMenuActivity
@@ -55,6 +54,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         CardView cardAddMenu = findViewById(R.id.card_add_menu);
 
         cardAddMenu.setOnClickListener(new View.OnClickListener() {

@@ -124,6 +124,12 @@
             android:name=".OrderDetailsActivity"
             android:exported="true"/>
 
+        <activity
+            android:name=".PendingOrdersActivity"
+            android:exported="true"/>
+
+
+
         <!-- Admin dashboard activity -->
         <activity
             android:name=".AdminDashboardActivity"

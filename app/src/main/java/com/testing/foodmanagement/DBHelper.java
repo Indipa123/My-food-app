@@ -965,4 +965,16 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("DBHelper", "Rows deleted: " + rowsDeleted);
     }
 
+    public Cursor getPendingOrder() {
+        SQLiteDatabase db = this.getReadableDatabase(); // Replace 'this' with your actual context or database instance
+        String query = "SELECT * FROM finalOrder WHERE status = ?";
+        String[] selectionArgs = new String[]{"Pending"};
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        return cursor;
+    }
+
+
 }
