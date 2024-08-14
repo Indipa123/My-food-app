@@ -834,6 +834,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return null;
     }
+
     public void addOrder(String email, String itemName, String itemPrice,
                          String itemQuantity, String branch, String phone,
                          String paymentMethod, String customerLocation) {
@@ -886,6 +887,26 @@ public class DBHelper extends SQLiteOpenHelper {
     public void cancelOrder(int orderId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Orders", "orderId=?", new String[]{String.valueOf(orderId)});
+        db.close();
+    }
+
+    public int getNextOrderId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT MAX(orderId) FROM Orders", null);
+
+        int nextOrderId = 1; // Default to 1 if no orders exist
+        if (cursor.moveToFirst()) {
+            nextOrderId = cursor.getInt(0) + 1;
+        }
+        cursor.close();
+        db.close();
+
+        return nextOrderId;
+    }
+
+    public void clearCart(int Id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Cart", "Id = ?", new String[]{String.valueOf(Id)});
         db.close();
     }
 

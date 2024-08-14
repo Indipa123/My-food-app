@@ -2,6 +2,7 @@ package com.testing.foodmanagement;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -79,6 +80,7 @@ public class CheckoutActivity2 extends AppCompatActivity {
 
                     // Insert the order into the database
                     addOrder(email, selectedBranch, paymentMethod, location, phone);
+
                 } else {
                     Toast.makeText(this, "Please select a branch.", Toast.LENGTH_LONG).show();
                 }
@@ -122,15 +124,24 @@ public class CheckoutActivity2 extends AppCompatActivity {
         // Fetch the cart items
         List<CartItem> cartItems = dbHelper.getCartItemByCartId(cartId);
 
+        int orderId = dbHelper.getNextOrderId();
+
         // Insert each item into the Orders table
+
         for (CartItem item : cartItems) {
             dbHelper.addOrder(email, item.getName(), String.valueOf(item.getPrice()),
                     String.valueOf(item.getQuantity()), branch, phone,
                     paymentMethod, location);
         }
 
+        dbHelper.clearCart(cartId);
+
         // Notify user
         Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(CheckoutActivity2.this, OrderDetailsActivity.class);
+        intent.putExtra("orderId", orderId); // Pass the orderId
+        startActivity(intent);
 
         // Optional: Clear the cart or navigate to another activity
     }
