@@ -933,6 +933,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    @SuppressLint("Range")
     public String getUserEmail(String phoneNumber) {
         String email = null;
         SQLiteDatabase db = this.getReadableDatabase(); // Get readable database instance
