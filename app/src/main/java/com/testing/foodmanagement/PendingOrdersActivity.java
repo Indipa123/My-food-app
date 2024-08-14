@@ -40,6 +40,12 @@ public class PendingOrdersActivity extends AppCompatActivity {
                 order.setItemName(cursor.getString(cursor.getColumnIndexOrThrow("orderName")));
                 order.setItemQuantity(cursor.getString(cursor.getColumnIndexOrThrow("orderQuantity")));
                 order.setItemPrice(cursor.getString(cursor.getColumnIndexOrThrow("orderPrice")));
+                order.setBranch(cursor.getString(cursor.getColumnIndexOrThrow("branch")));
+                order.setCustomerLocation(cursor.getString(cursor.getColumnIndexOrThrow("customerLocation")));
+                order.setPhone(cursor.getString(cursor.getColumnIndexOrThrow("phone")));
+
+
+
                 // Additional fields if necessary
                 orders.add(order);
             } while (cursor.moveToNext());

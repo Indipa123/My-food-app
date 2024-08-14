@@ -51,7 +51,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 "email TEXT, " +
                 "orderName TEXT, " +
                 "orderQuantity TEXT, " +
-                "orderPrice TEXT)");
+                "orderPrice TEXT, " +
+                "branch TEXT, " +
+                "customerLocation TEXT, " +
+                "phone TEXT, " +
+                "status TEXT DEFAULT 'Pending')");
+
 
         MyDB.execSQL("CREATE TABLE food_items (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +

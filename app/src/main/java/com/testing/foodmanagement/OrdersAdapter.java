@@ -120,6 +120,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 values.put("orderName", order.getItemName());
                 values.put("orderQuantity", order.getItemQuantity());
                 values.put("orderPrice", order.getItemPrice());
+                values.put("branch" , order.getBranch());
+                values.put("customerLocation", order.getCustomerLocation());
+                values.put("phone", order.getPhone());
+                values.put("status", "Pending");
+
 
                 long insertId = db.insert("finalOrder", null, values);
 
