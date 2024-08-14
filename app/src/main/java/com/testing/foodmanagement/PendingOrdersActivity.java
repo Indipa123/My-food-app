@@ -18,6 +18,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     private TextView noOrdersMessage;  // Ensure this view is declared
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
