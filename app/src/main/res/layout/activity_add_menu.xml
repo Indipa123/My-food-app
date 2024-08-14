@@ -9,40 +9,39 @@
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:hint="Food Name"/>
 
     <EditText
         android:id="@+id/editTextCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:hint="Category"/>
 
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:hint="Description"/>
 
     <EditText
         android:id="@+id/editTextPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:hint="Price"
         android:inputType="numberDecimal"/>
 
-    <EditText
-        android:id="@+id/editTextIngredients"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ingredients"/>
+    <!-- ImageView to display selected image -->
 
     <CheckBox
         android:id="@+id/checkBoxAvailable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available"/>
+        android:text="Available" />
 
-    <!-- ImageView to display selected image -->
     <ImageView
         android:id="@+id/addFoodimage"
         android:layout_width="match_parent"

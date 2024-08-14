@@ -30,17 +30,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class signupJava extends AppCompatActivity {
+
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int LOCATION_REQUEST_CODE = 1;
 
-    EditText fname, lname, email, pass,conpass, phone;
+    EditText fname, lname, email, pass, conpass, phone;
     Button b1, takePhotoButton, importPhotoButton, chooseLocationButton;
     TextView t1;
     ImageView profileImageView;
     DBHelper DB;
     public static String SIGNUPEMAIL = "";
     private Bitmap profileBitmap;
-    private LatLng selectedLocation;  // To store the selected location
+    private String selectedAddress; // To store the selected address
 
     private ActivityResultLauncher<Intent> takePictureLauncher;
     private ActivityResultLauncher<Intent> pickGalleryLauncher;
@@ -124,7 +125,7 @@ public class signupJava extends AppCompatActivity {
                 return; // Exit early to avoid proceeding with incomplete data
             }
 
-            if (selectedLocation == null) {
+            if (selectedAddress == null) {
                 Toast.makeText(signupJava.this, "Please select a location", Toast.LENGTH_LONG).show();
                 return; // Exit early if location is not selected
             }
@@ -142,10 +143,8 @@ public class signupJava extends AppCompatActivity {
                         imageBytes = stream.toByteArray();
                     }
 
-                    // Save location as a string
-                    String addressStr = selectedLocation.latitude + "," + selectedLocation.longitude;
-
-                    Boolean insert = DB.insertData(fnameStr, lnameStr, emailStr, passStr, phoneStr, addressStr, imageBytes);
+                    // Save location as a string (address)
+                    Boolean insert = DB.insertData(fnameStr, lnameStr, emailStr, passStr, phoneStr, selectedAddress, imageBytes);
                     if (insert) {
                         Toast.makeText(signupJava.this, "Registered Successfully", Toast.LENGTH_LONG).show();
                         SIGNUPEMAIL = emailStr;
@@ -173,9 +172,9 @@ public class signupJava extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == LOCATION_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            selectedLocation = data.getParcelableExtra("location");
-            // Optionally, update the UI to indicate that a location was selected
-            Toast.makeText(this, "Location Selected: " + selectedLocation.latitude + ", " + selectedLocation.longitude, Toast.LENGTH_SHORT).show();
+            selectedAddress = data.getStringExtra("address");
+            // Optionally, update the UI to indicate that an address was selected
+            Toast.makeText(this, "Location Selected: " + selectedAddress, Toast.LENGTH_SHORT).show();
         }
     }
 

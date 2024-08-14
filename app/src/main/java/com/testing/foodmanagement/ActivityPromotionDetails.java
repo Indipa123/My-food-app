@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivityPromotionDetails extends AppCompatActivity {
 
-    private TextView promotionNameTextView, promotionCodeTextView, descriptionTextView,
+    private TextView promotionNameTextView, descriptionTextView,
             promotionStartDateTextView, promotionEndDateTextView, promotionDiscountTextView;
     private ImageView promotionImageView;
 
@@ -20,7 +20,6 @@ public class ActivityPromotionDetails extends AppCompatActivity {
         setContentView(R.layout.activity_promotion_details);
 
         promotionNameTextView = findViewById(R.id.promotionNameTextView);
-        promotionCodeTextView = findViewById(R.id.promotionCodeTextView);
         descriptionTextView = findViewById(R.id.descriptionTextView);
         promotionStartDateTextView = findViewById(R.id.promotionStartDateTextView);
         promotionEndDateTextView = findViewById(R.id.promotionEndDateTextView);
@@ -36,7 +35,6 @@ public class ActivityPromotionDetails extends AppCompatActivity {
 
         if (promotion != null) {
             promotionNameTextView.setText(promotion.getPromotionName());
-            promotionCodeTextView.setText(promotion.getPromotionCode());
             descriptionTextView.setText(promotion.getDescription());
             promotionStartDateTextView.setText(promotion.getPromotionStartDate());
             promotionEndDateTextView.setText(promotion.getPromotionEndDate());

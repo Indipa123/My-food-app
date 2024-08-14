@@ -1,16 +1,14 @@
 package com.testing.foodmanagement;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.widget.SearchView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,13 +17,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class SelectLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -77,51 +74,54 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
             // Add a marker at the clicked location
             mMap.addMarker(new MarkerOptions().position(latLng).title("Selected Location"));
 
-            // Return the selected location to the previous activity
-            Intent intent = new Intent();
-            intent.putExtra("location", latLng);
-            setResult(RESULT_OK, intent);
-            finish();
+            // Fetch the address using Geocoder
+            Geocoder geocoder = new Geocoder(SelectLocationActivity.this);
+            try {
+                List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    String fullAddress = address.getAddressLine(0); // Get the full address
+
+                    // Return the selected location and address to the previous activity
+                    Intent intent = new Intent();
+                    intent.putExtra("location", latLng);
+                    intent.putExtra("address", fullAddress);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    Toast.makeText(SelectLocationActivity.this, "Unable to fetch address", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(SelectLocationActivity.this, "Error fetching address", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     private void searchLocation(String locationName) {
-        // Use Places API to search for the location by name
-        FindCurrentPlaceRequest placeRequest = FindCurrentPlaceRequest.newInstance(
-                Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the User grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        placesClient.findCurrentPlace(placeRequest).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                FindCurrentPlaceResponse response = task.getResult();
-                if (response != null) {
-                    // If a place is found, move the map and place a marker
-                    for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                        Place place = placeLikelihood.getPlace();
-                        if (Objects.requireNonNull(place.getName()).equalsIgnoreCase(locationName)) {
-                            LatLng latLng = place.getLatLng();
-                            if (latLng != null) {
-                                mMap.clear();
-                                mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        Geocoder geocoder = new Geocoder(this);
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-                                // Return the selected location to the previous activity
-                                Intent intent = new Intent();
-                                intent.putExtra("location", latLng);
-                                setResult(RESULT_OK, intent);
-                                finish();
-                                break;
-                            }
-                        }
-                    }
-                }
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(latLng).title(address.getAddressLine(0)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                // Return the selected location and address to the previous activity
+                Intent intent = new Intent();
+                intent.putExtra("location", latLng);
+                intent.putExtra("address", address.getAddressLine(0));
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show();
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error searching location", Toast.LENGTH_SHORT).show();
+        }
     }
 }

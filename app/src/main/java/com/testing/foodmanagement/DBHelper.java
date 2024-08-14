@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Canteen.db";
 
     public DBHelper(Context context) {
-        super(context, DBNAME, null, 15);
+        super(context, DBNAME, null, 17);
     }
 
     @Override
@@ -59,7 +59,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "category TEXT, " +
                 "description TEXT, " +
                 "price REAL, " +
-                "ingredients TEXT, " +
                 "available INTEGER, " +
                 "image BLOB)");
 
@@ -68,7 +67,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "phone TEXT, " +
                 "email TEXT, " +
                 "openHours TEXT, " +
-                "location TEXT)");
+                "location TEXT)"); // Added the address column
+
+
 
         MyDB.execSQL("CREATE TABLE Categories(" +
                 "categoryId INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -215,7 +216,6 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("category", foodItem.getCategory());
         values.put("description", foodItem.getDescription());
         values.put("price", foodItem.getPrice());
-        values.put("ingredients", foodItem.getIngredients());
         values.put("available", foodItem.isAvailable() ? 1 : 0);
         values.put("image", foodItem.getImage());  // Store image as byte array
 
@@ -235,11 +235,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -345,11 +344,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -369,11 +367,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -393,11 +390,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -416,11 +412,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                FoodItem item = new FoodItem(id, name, category, description, price, ingredients, available, image);
+                FoodItem item = new FoodItem(id, name, category, description, price, available, image);
                 foodItemList.add(item);
             } while (cursor.moveToNext());
         }
@@ -515,11 +510,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
                 @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("price"));
-                @SuppressLint("Range") String ingredients = cursor.getString(cursor.getColumnIndex("ingredients"));
                 @SuppressLint("Range") boolean available = cursor.getInt(cursor.getColumnIndex("available")) > 0;
                 @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
 
-                foodItem = new FoodItem(itemId, name, category, description, price, ingredients, available, image);
+                foodItem = new FoodItem(itemId, name, category, description, price, available, image);
             }
         } finally {
             if (cursor != null) {
@@ -680,7 +674,6 @@ public class DBHelper extends SQLiteOpenHelper {
             Promotion promotion = new Promotion(
                     cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                     cursor.getString(cursor.getColumnIndexOrThrow("promotion_name")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("promotion_code")),
                     cursor.getString(cursor.getColumnIndexOrThrow("description")),
                     cursor.getString(cursor.getColumnIndexOrThrow("promotion_start_date")),
                     cursor.getString(cursor.getColumnIndexOrThrow("promotion_end_date")),
@@ -881,5 +874,42 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    public String getOrderDetails(int orderId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("Orders", null, "orderId=?", new String[]{String.valueOf(orderId)}, null, null, null);
+
+        StringBuilder orderDetails = new StringBuilder();
+        if (cursor != null && cursor.moveToFirst()) {
+            String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
+            String itemName = cursor.getString(cursor.getColumnIndexOrThrow("itemName"));
+            String itemPrice = cursor.getString(cursor.getColumnIndexOrThrow("itemPrice"));
+            String itemQuantity = cursor.getString(cursor.getColumnIndexOrThrow("itemQuantity"));
+            String branch = cursor.getString(cursor.getColumnIndexOrThrow("branch"));
+            String phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
+            String paymentMethod = cursor.getString(cursor.getColumnIndexOrThrow("paymentMethod"));
+            String customerLocation = cursor.getString(cursor.getColumnIndexOrThrow("customerLocation"));
+
+            orderDetails.append("Order ID: ").append(orderId).append("\n")
+                    .append("Email: ").append(email).append("\n")
+                    .append("Item: ").append(itemName).append("\n")
+                    .append("Price: ").append(itemPrice).append("\n")
+                    .append("Quantity: ").append(itemQuantity).append("\n")
+                    .append("Branch: ").append(branch).append("\n")
+                    .append("Phone: ").append(phone).append("\n")
+                    .append("Payment Method: ").append(paymentMethod).append("\n")
+                    .append("Location: ").append(customerLocation).append("\n");
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+        return orderDetails.toString();
+    }
+    public void cancelOrder(int orderId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Orders", "orderId=?", new String[]{String.valueOf(orderId)});
+        db.close();
+    }
 
 }

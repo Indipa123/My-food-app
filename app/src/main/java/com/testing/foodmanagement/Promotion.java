@@ -26,6 +26,16 @@ public class Promotion {
         this.image = image;
     }
 
+    public Promotion(int id, String promotionName, String description, String promotionStartDate, String promotionEndDate, double promotionDiscount, byte[] image) {
+        this.id = id;
+        this.promotionName = promotionName;
+        this.description = description;
+        this.promotionStartDate = promotionStartDate;
+        this.promotionEndDate = promotionEndDate;
+        this.promotionDiscount = promotionDiscount;
+        this.image = image;
+    }
+
     // Getters and Setters in the same order as attributes
     public int getId() {
         return id;

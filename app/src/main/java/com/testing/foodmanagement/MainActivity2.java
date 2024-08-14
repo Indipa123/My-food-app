@@ -1,10 +1,12 @@
 package com.testing.foodmanagement;
+
 import static android.content.ContentValues.TAG;
 
-import com.testing.foodmanagement.R;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +32,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -74,20 +78,15 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
             startActivity(intent);
         });
 
-
-
         // Display recently added items
         displayRecentlyAddedItems();
         displayCategories();
         displayPromotions();
 
         // Set click listener for food items card view
-        cardViewFoodItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity2.this, CustomerMenuActivity.class);
-                startActivity(intent);
-            }
+        cardViewFoodItems.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity2.this, CustomerMenuActivity.class);
+            startActivity(intent);
         });
 
         // Add the search functionality
@@ -102,29 +101,25 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
             return false;
         });
 
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.nav_home) {
-                    // Handle navigation to Home
-                    // Replace with your fragment transaction or activity launch code
-                    return true;
-                } else if (itemId == R.id.nav_browse) {
-                    // Handle navigation to SearchActivity
-                    Intent intent = new Intent(MainActivity2.this, SearchActivity.class);
-                    startActivity(intent);
-                    return true;
-                } else if (itemId == R.id.nav_account) {
-                    // Handle navigation to AccountActivity
-                    Intent intent = new Intent(MainActivity2.this, AccountActivity.class);
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                // Handle navigation to Home
+                // Replace with your fragment transaction or activity launch code
+                return true;
+            } else if (itemId == R.id.nav_browse) {
+                // Handle navigation to SearchActivity
+                Intent intent = new Intent(MainActivity2.this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_account) {
+                // Handle navigation to AccountActivity
+                Intent intent = new Intent(MainActivity2.this, AccountActivity.class);
+                startActivity(intent);
+                return true;
             }
+            return false;
         });
     }
 
@@ -185,13 +180,10 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
             textViewCategoryName.setText(category.getCategoryName());
 
             // Set the OnClickListener for the category view
-            categoryView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity2.this, CategoryFoodItemsActivity.class);
-                    intent.putExtra("categoryName", category.getCategoryName());
-                    startActivity(intent);
-                }
+            categoryView.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity2.this, CategoryFoodItemsActivity.class);
+                intent.putExtra("categoryName", category.getCategoryName());
+                startActivity(intent);
             });
 
             linearLayoutCategories.addView(categoryView);
@@ -237,29 +229,46 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
         DBHelper dbHelper = new DBHelper(this);
         List<Branch> branches = dbHelper.getAllBranches(); // Method to get all branches
 
+        LatLng firstBranchLocation = null;
+
         for (Branch branch : branches) {
-            String[] locationParts = branch.getLocation().split(",");
-            double lat = Double.parseDouble(locationParts[0]);
-            double lng = Double.parseDouble(locationParts[1]);
-            LatLng latLng = new LatLng(lat, lng);
-            mMap.addMarker(new MarkerOptions().position(latLng).title(branch.getBranchName()));
+            LatLng latLng = getLatLngFromAddress(branch.getLocation());
+            if (latLng != null) {
+                mMap.addMarker(new MarkerOptions().position(latLng).title(branch.getBranchName()));
+                if (firstBranchLocation == null) {
+                    firstBranchLocation = latLng;
+                }
+            } else {
+                Toast.makeText(this, "Error getting location for " + branch.getBranchName(), Toast.LENGTH_SHORT).show();
+            }
         }
 
-        if (!branches.isEmpty()) {
-            String[] locationParts = branches.get(0).getLocation().split(",");
-            double lat = Double.parseDouble(locationParts[0]);
-            double lng = Double.parseDouble(locationParts[1]);
-            LatLng firstBranchLocation = new LatLng(lat, lng);
+        if (firstBranchLocation != null) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstBranchLocation, 10));
         }
     }
+
+    private LatLng getLatLngFromAddress(String address) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(address, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address location = addresses.get(0);
+                return new LatLng(location.getLatitude(), location.getLongitude());
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Geocoding error: ", e);
+        }
+        return null;
+    }
+
     private void displayPromotions() {
         DBHelper dbHelper = new DBHelper(this);
         List<Promotion> promotions = dbHelper.getAllPromotions();
 
         LayoutInflater inflater = LayoutInflater.from(this);
         for (Promotion promotion : promotions) {
-            View categoryView = inflater.inflate(R.layout.promotions, linearLayoutCategories, false);
+            View categoryView = inflater.inflate(R.layout.promotions, linearLayoutPromotions, false);
 
             ImageView categoryImageView = categoryView.findViewById(R.id.categoryImageView);
             TextView textViewCategoryName = categoryView.findViewById(R.id.categoryNameTextView);
@@ -276,13 +285,10 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
             textViewCategoryName.setText(promotion.getPromotionName());
 
-            categoryView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity2.this, ActivityPromotionDetails.class);
-                    intent.putExtra("categoryName", promotion.getPromotionName());
-                    startActivity(intent);
-                }
+            categoryView.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity2.this, ActivityPromotionDetails.class);
+                intent.putExtra("categoryName", promotion.getPromotionName());
+                startActivity(intent);
             });
 
             linearLayoutPromotions.addView(categoryView);
