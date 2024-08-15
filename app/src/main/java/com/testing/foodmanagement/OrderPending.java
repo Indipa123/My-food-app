@@ -29,19 +29,6 @@ public class OrderPending {
         this.status = status;
     }
 
-    public OrderPending(Cursor cursor) {
-
-    }
-
-    public OrderPending(String orderName, String orderPrice, String status) {
-        this.orderName = orderName;
-        this.orderPrice = orderPrice;
-        this.status = status;
-
-
-    }
-
-    // Getters for each field
     public int getOrderPId() {
         return orderPId;
     }

@@ -16,7 +16,7 @@ public class PendingOrdersActivity extends AppCompatActivity {
     private OrdersPendingAdapter ordersPendingAdapter;
     private ArrayList<OrderPending> ordersPendingList;
     private DBHelper dbHelper;
-    private TextView noOrdersMessage;  // Ensure this view is declared
+    private TextView noOrdersMessage;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -27,40 +27,52 @@ public class PendingOrdersActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        noOrdersMessage = findViewById(R.id.noOrdersMessage);  // Initialize the view
+        noOrdersMessage = findViewById(R.id.noOrdersMessage);
         ordersPendingList = new ArrayList<>();
         dbHelper = new DBHelper(this);
 
         ordersPendingAdapter = new OrdersPendingAdapter(this, ordersPendingList);
         recyclerView.setAdapter(ordersPendingAdapter);
 
-        loadPendingOrders(); // Load data initially
+        loadAllOrders(); // Load all types of orders initially
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadPendingOrders(); // Reload data when the activity resumes
+        loadAllOrders(); // Reload all orders when the activity resumes
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void loadPendingOrders() {
+    private void loadAllOrders() {
         ordersPendingList.clear(); // Clear the list to avoid duplication
-        Cursor cursor = dbHelper.getPendingOrders();
 
-        if (cursor.getCount() == 0) {
-            if (noOrdersMessage != null) {  // Null check before setting visibility
-                noOrdersMessage.setVisibility(View.VISIBLE);
-            }
+        // Load Pending Orders
+        Cursor pendingCursor = dbHelper.getPendingOrders();
+        addOrdersFromCursor(pendingCursor);
+
+        // Load Received Orders
+        Cursor receivedCursor = dbHelper.getReceivedOrders();
+        addOrdersFromCursor(receivedCursor);
+
+        // Load Picked Up Orders
+        Cursor pickedUpCursor = dbHelper.getPickedupOrders();
+        addOrdersFromCursor(pickedUpCursor);
+
+        // Update UI based on the results
+        if (ordersPendingList.isEmpty()) {
+            noOrdersMessage.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
-            cursor.close();
-            return;
+        } else {
+            noOrdersMessage.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
-        if (noOrdersMessage != null) {  // Null check before setting visibility
-            noOrdersMessage.setVisibility(View.GONE);
-        }
-        recyclerView.setVisibility(View.VISIBLE);
+        ordersPendingAdapter.notifyDataSetChanged();
+    }
+
+    private void addOrdersFromCursor(Cursor cursor) {
+        if (cursor == null) return;
 
         while (cursor.moveToNext()) {
             @SuppressLint("Range") int orderPId = cursor.getInt(cursor.getColumnIndex("orderPId"));
@@ -79,6 +91,5 @@ public class PendingOrdersActivity extends AppCompatActivity {
             ordersPendingList.add(orderPending);
         }
         cursor.close();
-        ordersPendingAdapter.notifyDataSetChanged(); // Notify the adapter to refresh the RecyclerView
     }
 }

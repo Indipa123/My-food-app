@@ -79,7 +79,7 @@ public class MainActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
         rating.setOnClickListener(view -> {
             // Create an Intent to start CartInfoActivity
-            Intent intent = new Intent(MainActivity2.this, PendingOrdersActivity2.class);
+            Intent intent = new Intent(MainActivity2.this, PendingOrdersActivity.class);
             intent.putExtra("EMAIL", email);
             // Start the new activity
             startActivity(intent);

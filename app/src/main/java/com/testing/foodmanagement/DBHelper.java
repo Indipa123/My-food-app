@@ -137,14 +137,6 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(MyDB);
     }
 
-    public boolean updateOrderStatus(int orderPId, String status) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("status", status);
-        int rowsAffected = db.update("finalOrder", contentValues, "orderPId" + " = ?", new String[]{String.valueOf(orderPId)});
-        db.close();
-        return rowsAffected > 0;
-    }
 
     public Cursor getOrderDetailsByEmail(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -993,8 +985,64 @@ public class DBHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM finalOrder WHERE status = 'Pending'";
         return db.rawQuery(query, null);
     }
+    public Cursor getReceivedOrders() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM finalOrder WHERE status = 'Your Order is Received'";
+        return db.rawQuery(query, null);
+    }
+    public Cursor getPickedupOrders() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM finalOrder WHERE status = 'Your Order is Prepared'";
+        return db.rawQuery(query, null);
+    }
 
+    public boolean updateOrderStatus(int orderPId, String status) {
+        SQLiteDatabase db = null;
+        boolean isUpdated = false;
+        try {
+            db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("status", status);
+            int result = db.update("finalOrder", contentValues, "orderPId = ?", new String[]{String.valueOf(orderPId)});
+            isUpdated = result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+        return isUpdated;
+    }
+    public int getCountByStatus(String status) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM finalOrder WHERE status = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{status});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
 
+    // Method to get count of all pending orders
+    public int getPendingOrdersCount() {
+        return getCountByStatus("Pending");
+    }
+
+    // Method to get count of all prepared orders
+    public int getPreparedOrdersCount() {
+        return getCountByStatus("Your Order is Prepared");
+    }
+
+    // Method to get count of all received orders
+    public int getReceivedOrdersCount() {
+        return getCountByStatus("Your Order is Received");
+    }
+    public int getCompletedOrdersCount() {
+        return getCountByStatus("Ready To Pick up Order");
+    }
 
 
 

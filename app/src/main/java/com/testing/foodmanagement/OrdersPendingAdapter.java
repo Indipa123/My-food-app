@@ -2,6 +2,8 @@ package com.testing.foodmanagement;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +47,11 @@ public class OrdersPendingAdapter extends RecyclerView.Adapter<OrdersPendingAdap
         holder.branch.setText("Branch: " + orderPending.getBranch());
         holder.status.setText("Status: " + orderPending.getStatus());
 
+        updateButtonColors(holder, orderPending.getStatus());
+
         // Set onClickListeners for buttons
         holder.btnOrderReceived.setOnClickListener(v -> updateOrderStatus(holder, orderPending, "Your Order is Received"));
-
         holder.btnOrderPreparing.setOnClickListener(v -> updateOrderStatus(holder, orderPending, "Your Order is Prepared"));
-
         holder.btnReadyForPickup.setOnClickListener(v -> updateOrderStatus(holder, orderPending, "Ready To Pick up Order"));
     }
 
@@ -61,23 +63,37 @@ public class OrdersPendingAdapter extends RecyclerView.Adapter<OrdersPendingAdap
     private void updateOrderStatus(OrderPendingViewHolder holder, OrderPending orderPending, String status) {
         // Update the status in the database
         boolean isUpdated = dbHelper.updateOrderStatus(orderPending.getOrderPId(), status);
+        Log.d("UpdateStatus", "Order ID: " + orderPending.getOrderPId() + ", Status: " + status + ", Updated: " + isUpdated);
 
         if (isUpdated) {
-            if (status.equals("Ready To Pick up Order")) {
-                // Remove the item from the list
-                int position = holder.getAdapterPosition();
-                ordersPendingList.remove(position);
-                notifyItemRemoved(position);
-            } else {
-                // Update the status in the UI
-                orderPending.setStatus(status);
-                holder.status.setText("Status: " + status);
-            }
+            // Update the status in the UI
+            orderPending.setStatus(status);
+            holder.status.setText("Status: " + status);
+            updateButtonColors(holder, status);
 
             // Notify the user
             Toast.makeText(context, "Order status updated: " + status, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Failed to update order status.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateButtonColors(OrderPendingViewHolder holder, String status) {
+        // Reset colors
+        holder.btnOrderReceived.setBackgroundColor(Color.GRAY);
+        holder.btnOrderPreparing.setBackgroundColor(Color.GRAY);
+        holder.btnReadyForPickup.setBackgroundColor(Color.GRAY);
+
+        switch (status) {
+            case "Your Order is Received":
+                holder.btnOrderReceived.setBackgroundColor(Color.GREEN);
+                break;
+            case "Your Order is Prepared":
+                holder.btnOrderPreparing.setBackgroundColor(Color.GREEN);
+                break;
+            case "Ready To Pick up Order":
+                holder.btnReadyForPickup.setBackgroundColor(Color.GREEN);
+                break;
         }
     }
 

@@ -4,17 +4,24 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 public class AdminDashboardActivity extends AppCompatActivity {
+
+    private TextView pendingOrdersCount,completedOrdersCount;
+    private DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
+        dbHelper = new DBHelper(this);
 
+        pendingOrdersCount = findViewById(R.id.pendingOrdersCount);
+        completedOrdersCount = findViewById(R.id.completedOrdersCount);
 
         // Set a click listener on the CardView
 
@@ -104,5 +111,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(AdminDashboardActivity.this, PendingOrdersActivity.class);
             startActivity(intent);
         });
+        loadOrderCounts();
     }
-}
+    private void loadOrderCounts() {
+        int pendingCount = dbHelper.getPendingOrdersCount();
+        int preparedCount = dbHelper.getPreparedOrdersCount();
+        int receivedCount = dbHelper.getReceivedOrdersCount();
+        int comleteCount = dbHelper.getCompletedOrdersCount();
+
+
+        // Set the count to TextView (if you want to show all three counts)
+        pendingOrdersCount.setText("Pending: " + pendingCount + "\nPrepared: " + preparedCount + "\nReceived: " + receivedCount);
+        completedOrdersCount.setText("Completed :"+ comleteCount);
+    }
+    }
+
