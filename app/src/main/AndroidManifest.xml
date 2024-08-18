@@ -128,16 +128,6 @@
             android:name=".PendingOrdersActivity"
             android:exported="true"/>
 
-        <activity
-            android:name=".PendingOrdersActivity2"
-            android:exported="true"/>
-
-
-
-
-
-
-
 
         <!-- Admin dashboard activity -->
         <activity

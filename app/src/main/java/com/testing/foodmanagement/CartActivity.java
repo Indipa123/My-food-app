@@ -50,7 +50,8 @@ public class CartActivity extends AppCompatActivity {
 
         // Set a click listener for the checkout button
         buttonCheckout.setOnClickListener(v -> {
-
+            Intent intent2 = new Intent(CartActivity.this,CartInfoActivity.class);
+            startActivity(intent2);
         });
     }
 }
